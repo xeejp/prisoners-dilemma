@@ -13,7 +13,15 @@ defmodule PrisonersDilemma do
     {:ok, %{"data" => %{
        page: "waiting",
        participants: %{},
-       question: %{
+       message: %{
+         waiting: "",
+         description: [
+           "あいうえお",
+           "かきくけこ",
+           "さしすせそ",
+         ],
+         experiment: [
+         ],
        },
        join_experiment: 0,
      }}}
@@ -75,7 +83,7 @@ defmodule PrisonersDilemma do
     host_action = %{
       type: "CHANGE_PAGE",
       page: data.page,
-      question: data.question,
+      message: data.message,
       users: data.participants,
       join_experiment: data.join_experiment,
     }
@@ -83,28 +91,27 @@ defmodule PrisonersDilemma do
       {id, %{action: %{
          type: "CHANGE_PAGE",
          page: data.page,
-         question: data.question,
+         message: data.message,
          status: data.participants[id].status,
          join_experiment: data.join_experiment,
        }}} end) |> Enum.into(%{})
      {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
   end
 
-  def handle_received(data, %{"action" => "update question", "params" => params}) do
-    data = %{data | question: params}
-    host_action = %{
-      type: "UPDATE_QUESTION",
-      question: data.question,
+  def handle_received(data, %{"action" => "update message", "params" => params}) do
+    data = %{data | message: params}
+    action = %{
+      type: "UPDATE_MESSAGE",
+      message: data.message,
     }
-
-    {:ok, %{"data" => data, "host" => %{action: host_action}}}
+    {:ok, %{"data" => data, "host" => %{action: action}, "participant" => dispatch_to_all(data.participants, action)}}
   end
 
   def handle_received(data, %{"action" => "fetch contents"}, id) do
     action = %{
       type: "FETCH_CONTENTS",
       page: data.page,
-      question: data.question,
+      message: data.message,
       status: data.participants[id].status,
       join_experiment: data.join_experiment,
     }

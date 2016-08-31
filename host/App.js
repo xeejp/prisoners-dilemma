@@ -5,6 +5,7 @@ import { fetchContents } from './actions'
 
 import PageStepper from './PageStepper'
 import Users from './Users'
+import MessageEditor from './MessageEditor'
 
 
 const mapStateToProps = ({}) => ({
@@ -26,6 +27,7 @@ class App extends Component {
       <div>
         <PageStepper />
         <Users />
+        <MessageEditor />
       </div>
     )
   }

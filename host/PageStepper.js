@@ -77,9 +77,11 @@ class PageStepper extends Component {
         <Stepper activeStep={pages.indexOf(page)} linear={false}>
           {steps}
         </Stepper>
+        <div style={{textAlign: "center"}} >
           <RaisedButton label="戻る" onClick={this.backPage.bind(this)} />
           <RaisedButton label="次へ" primary={true} onClick={this.nextPage.bind(this)} />
-          </div>
+        </div>
+      </div>
     )
   }
 }

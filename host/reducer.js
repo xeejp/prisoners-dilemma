@@ -1,7 +1,14 @@
 const initialState = {
   page: "waiting",
   users: {},
-  question: {
+  message: {
+    waiting: "",
+    description: [
+      "あいうえお",
+      "かきくけこ",
+      "さしすせそ",
+    ],
+    experiment: [],
   },
   join_experiment: 0,
 }
@@ -18,7 +25,7 @@ function reducer(state = initialState, action) {
     case "CHANGE_PAGE":
       return Object.assign({}, state, {
         page: action.page,
-        question: action.question,
+        message: action.message,
         users: action.users,
         join_experiment: action.join_experiment,
       })
@@ -27,7 +34,7 @@ function reducer(state = initialState, action) {
       console.log("FETCH_CONTENTS")
       return Object.assign({}, state, {
         page: action.page,
-        question: action.question,
+        message: action.message,
         users: action.participants,
         join_experiment: action.join_experiment,
       })
@@ -39,9 +46,9 @@ function reducer(state = initialState, action) {
         join_experiment: action.join_experiment,
       })
 
-    case "UPDATE_QUESTION":
+    case "UPDATE_MESSAGE":
       return Object.assign({}, state, {
-        question: action.question,
+        message: action.message,
       })
 
     default:

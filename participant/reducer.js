@@ -5,6 +5,7 @@ function reducer(state = {}, action) {
       return Object.assign({}, state, {
         page: action.page,
         status: action.status,
+        message: action.message,
         join_experiment: action.join_experiment,
       })
 
@@ -17,6 +18,7 @@ function reducer(state = {}, action) {
       return Object.assign({}, state, {
         page: action.page,
         status: action.status,
+        message: action.message,
         join_experiment: action.join_experiment,
       })
 
@@ -24,6 +26,11 @@ function reducer(state = {}, action) {
       return Object.assign({}, state, {
         status: action.status,
         join_experiment: action.join_experiment,
+      })
+
+    case "UPDATE_MESSAGE":
+      return Object.assign({}, state, {
+        message: action.message,
       })
 
     default:
