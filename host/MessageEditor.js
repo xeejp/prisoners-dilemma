@@ -30,9 +30,9 @@ class MessageEditor extends Component {
       defaultMessage: {
         waiting: "",
         description: [
-          "あいうえお",
-          "かきくけこ",
-          "さしすせそ",
+          { id: 0, text: "A"},
+          { id: 1, text: "B"},
+          { id: 2, text: "C"},
         ],
       },
 
@@ -61,7 +61,7 @@ class MessageEditor extends Component {
           <tbody>
             {
               this.state.message.description.map((message, index) => (
-                <tr>
+                <tr key={message.id}>
                   <td>
                     <FloatingActionButton 
                       mini={true}
@@ -74,8 +74,8 @@ class MessageEditor extends Component {
                   <td>
                     <TextField
                       hintText={"問題の説明"}
-                      defaultValue={message}
-                      onBlur={this.handleChange.bind(this, ["description", index])}
+                      defaultValue={message.text}
+                      onBlur={this.handleChange.bind(this, ["description", index, "text"])}
                       multiLine={false}
                       fullWidth={true}
                     />
@@ -100,7 +100,10 @@ class MessageEditor extends Component {
   }
 
   handleOpen() {
-    this.setState({ isOpen: true })
+    this.setState({ 
+      message: this.props.message,
+      isOpen: true,
+    })
   }
 
   handleClose() {
@@ -124,19 +127,36 @@ class MessageEditor extends Component {
   }
 
   deleteDescription(index) {
-    this.state.message.description.splice(index, 1)
-    const { dispatch } = this.props
-    dispatch(updateMessage(this.state.message))
+    var { message } = this.state
+    message.description.splice(index, 1)
+    this.setState({
+      message: message,
+    })
   }
 
   addDescription() {
-    this.state.message.description.push("")
-    const { dispatch } = this.props
-    dispatch(updateMessage(this.state.message))
+    var { message } = this.state
+    var id = 0
+    var flag = false
+    while (!flag) {
+      for (var i = 0; i < message.description.length; i++) {
+        if (message.description[i].id == id) {
+          console.log("a")
+          id++
+          break
+        } else if (i >= message.description.length-1) {
+          flag = true
+        }
+      }
+    }
+        
+    message.description.push({id: id, text: ""})
+    this.setState({
+      message: message,
+    })
   }
 
   submit() {
-    console.log("hello")
     const { dispatch } = this.props
     dispatch(updateMessage(this.state.message))
     this.setState({ isOpen: false })
@@ -144,11 +164,13 @@ class MessageEditor extends Component {
 
   reset() {
     this.setState({
-      message: this.state.defaultMessage,
+      isOpen: false,
     })
     const { dispatch } = this.props
-    dispatch(updateMessage(this.state.message))
+    dispatch(updateMessage(this.state.defaultMessage))
   }
+
+
   render() {
     const { page } = this.props
     const actions = [
@@ -182,21 +204,22 @@ class MessageEditor extends Component {
           open={this.state.isOpen}
           onRequestClose={this.handleClose.bind(this)}
           autoScrollBodyContent={true}
-        >
-          <Tabs
-            onChange={this.handleSlideIndex.bind(this)}
-            value={this.state.slideIndex}
-          >
-            <Tab label="待機" value={0} />
-            <Tab label="説明" value={1} />
-          </Tabs>
-          <SwipeableViews
-            index={this.state.slideIndex}
-            onChangeIndex={this.handleSlideIndex.bind(this)}
-          >
-            {this.WaitingTab()}
-            {this.DescriptionTab()}
-          </SwipeableViews>
+        >>
+            <Tabs
+              onChange={this.handleSlideIndex.bind(this)}
+              value={this.state.slideIndex}
+            >
+              <Tab label="待機" value={0} />
+              <Tab label="説明" value={1} />
+            </Tabs>
+            <SwipeableViews
+              index={this.state.slideIndex}
+              onChangeIndex={this.handleSlideIndex.bind(this)}
+            >
+              {this.WaitingTab()}
+              {this.DescriptionTab()}
+            </SwipeableViews>
+          </div>
         </Dialog>
       </div>
     )

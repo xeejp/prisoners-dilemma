@@ -16,9 +16,9 @@ defmodule PrisonersDilemma do
        message: %{
          waiting: "",
          description: [
-           "あいうえお",
-           "かきくけこ",
-           "さしすせそ",
+           %{id: 0, text: "A"},
+           %{id: 1, text: "B"},
+           %{id: 2, text: "C"},
          ],
          experiment: [
          ],

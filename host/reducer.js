@@ -3,11 +3,7 @@ const initialState = {
   users: {},
   message: {
     waiting: "",
-    description: [
-      "あいうえお",
-      "かきくけこ",
-      "さしすせそ",
-    ],
+    description: [],
     experiment: [],
   },
   join_experiment: 0,
