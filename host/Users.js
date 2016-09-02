@@ -4,27 +4,43 @@ import { connect } from 'react-redux'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 
-function createUserStatuStr(status) {
-  return (
-    <div>
-    </div>
-  )
-}
-
-const User = ({ id, status }) => (
-  <tr>
-    <td>{id}</td>
-    <td>{createUserStatuStr(status)}</td>
-  </tr>
-)
-
-const mapStateToProps = ({users}) => ({
+const mapStateToProps = ({page, users}) => ({
+  page,
   users,
 })
 
+function createUserStatuStr(page, user) {
+  switch (page) {
+    case "waiting":
+      return null
+    case "description":
+      return (
+        <div>
+          {
+            user.is_finish_description
+            ? <p>既読</p>
+            : <p>未読</p>
+          }
+        </div>
+      )
+    case "experiment":
+      return null
+    default:
+      return null
+  }
+}
+
+const User = ({page, user, id}) => (
+
+  <tr>
+    <td>{id}</td>
+    <td>{createUserStatuStr(page, user)}</td>
+  </tr>
+)
+
 class Users extends Component {
   render() {
-    const {users} = this.props
+    const {users, page} = this.props
 
     return (
       <Card 
@@ -49,8 +65,9 @@ class Users extends Component {
                   users[id].status != "noactive"
                     ? <User
                       key={id}
+                      page={page}
+                      user={users[id]}
                       id={id}
-                      status={users[id].status}
                     />
                     : null
                 )).reverse()

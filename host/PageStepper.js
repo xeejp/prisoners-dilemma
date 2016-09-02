@@ -9,7 +9,7 @@ import { getPage } from 'util/index'
 
 const pages = ["waiting", "description", "experiment", "result"]
 
-const mapStateToProps = ({page}) => ({
+const mapStateToProps = ({page, }) => ({
   page,
 })
 
@@ -77,9 +77,18 @@ class PageStepper extends Component {
         <Stepper activeStep={pages.indexOf(page)} linear={false}>
           {steps}
         </Stepper>
-        <div style={{textAlign: "center"}} >
-          <RaisedButton label="戻る" onClick={this.backPage.bind(this)} />
-          <RaisedButton label="次へ" primary={true} onClick={this.nextPage.bind(this)} />
+        <div>
+          <RaisedButton
+            label="戻る" 
+            style={{float: "left"}}
+            onClick={this.backPage.bind(this)}
+          />
+          <RaisedButton 
+            label="次へ" 
+            style={{float: "right"}}
+            primary={true}
+            onClick={this.nextPage.bind(this)}
+          />
         </div>
       </div>
     )

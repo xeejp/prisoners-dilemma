@@ -13,6 +13,7 @@ defmodule PrisonersDilemma do
     {:ok, %{"data" => %{
        page: "waiting",
        participants: %{},
+       finish_description: 0,
        message: %{
          waiting: "",
          description: [
@@ -31,10 +32,12 @@ defmodule PrisonersDilemma do
     if isactive do
       %{
         status: nil,
+        is_finish_dexcription: false,
       }
     else
       %{
-        status: "noactive"
+        status: "noactive",
+        is_finish_dexcription: false,
       }
     end
   end
@@ -55,6 +58,7 @@ defmodule PrisonersDilemma do
         type: "ADD_USER",
         id: id,
         users: participants,
+        join_experiment: data.join_experiment,
       }
       participant_action = %{
         type: "ADD_USER",
@@ -78,7 +82,10 @@ defmodule PrisonersDilemma do
       data = Map.put(data, :ans_programmer, 0) |> Map.put(:ans_banker, 0) |> Map.put(:ans_each, 0)
       participants = Enum.map(data.participants, fn {id, _} ->
         {id, new_participant(true)} end) |> Enum.into(%{})
-       data = %{data | participants: participants}
+      data = %{data | participants: participants}
+    end
+    if data.page == "description" do
+      data = %{data | finish_description: 0}
     end
     host_action = %{
       type: "CHANGE_PAGE",
@@ -86,6 +93,7 @@ defmodule PrisonersDilemma do
       message: data.message,
       users: data.participants,
       join_experiment: data.join_experiment,
+      finish_description: data.finish_description,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
       {id, %{action: %{
@@ -120,6 +128,19 @@ defmodule PrisonersDilemma do
 
   def handle_received(data, %{"action" => "submit answer", "params" => params}, id) do
     {:ok, %{"data" => data}}
+  end
+
+  def handle_received(data, %{"action" => "finish description"}, id) do
+    Logger.debug "finish description"
+    unless data.participants[id].is_finish_dexcription do
+      data = %{data | finish_description: data.finish_description+1}
+      data = put_in(data.participants[id].is_finish_dexcription, true)
+    end
+    action = %{
+      type: "FINISH_DESCRIPTION",
+      finish_description: data.finish_description,
+    }
+    {:ok, %{"data" => data, "host" => %{action: action}}}
   end
 
   def handle_received(data, _action, _id) do

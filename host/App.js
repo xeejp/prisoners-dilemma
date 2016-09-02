@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { fetchContents } from './actions'
 
 import PageStepper from './PageStepper'
+import HostMessage from './HostMessage'
 import Users from './Users'
 import MessageEditor from './MessageEditor'
 
@@ -26,6 +27,7 @@ class App extends Component {
     return (
       <div>
         <PageStepper />
+        <HostMessage />
         <Users />
         <MessageEditor />
       </div>

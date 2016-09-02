@@ -76,7 +76,7 @@ class MessageEditor extends Component {
                       hintText={"問題の説明"}
                       defaultValue={message.text}
                       onBlur={this.handleChange.bind(this, ["description", index, "text"])}
-                      multiLine={false}
+                      multiLine={true}
                       fullWidth={true}
                     />
                   </td>
@@ -204,22 +204,21 @@ class MessageEditor extends Component {
           open={this.state.isOpen}
           onRequestClose={this.handleClose.bind(this)}
           autoScrollBodyContent={true}
-        >>
-            <Tabs
-              onChange={this.handleSlideIndex.bind(this)}
-              value={this.state.slideIndex}
-            >
-              <Tab label="待機" value={0} />
-              <Tab label="説明" value={1} />
-            </Tabs>
-            <SwipeableViews
-              index={this.state.slideIndex}
-              onChangeIndex={this.handleSlideIndex.bind(this)}
-            >
-              {this.WaitingTab()}
-              {this.DescriptionTab()}
-            </SwipeableViews>
-          </div>
+        >
+          <Tabs
+            onChange={this.handleSlideIndex.bind(this)}
+            value={this.state.slideIndex}
+          >
+            <Tab label="待機" value={0} />
+            <Tab label="説明" value={1} />
+          </Tabs>
+          <SwipeableViews
+            index={this.state.slideIndex}
+            onChangeIndex={this.handleSlideIndex.bind(this)}
+          >
+            {this.WaitingTab()}
+            {this.DescriptionTab()}
+          </SwipeableViews>
         </Dialog>
       </div>
     )
