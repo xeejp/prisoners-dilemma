@@ -13,6 +13,7 @@ defmodule PrisonersDilemma do
     {:ok, %{"data" => %{
        page: "waiting",
        participants: %{},
+       pairs: %{},
        finish_description: 0,
        message: %{
          waiting: "",

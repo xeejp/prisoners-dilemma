@@ -29,10 +29,6 @@ class Description extends Component {
     this.setState({
       slideIndex: this.state.slideIndex + 1,
     })
-    if (this.state.slideIndex == this.props.message.description.length-2) {
-      const { dispatch } = this.props
-      dispatch(finishDescription())
-    }
   }
 
   handleBack() {
@@ -41,8 +37,15 @@ class Description extends Component {
     })
   }
 
+  componentWillMount() {
+  }
+
   render() {
     const { message } = this.props
+    if (this.state.slideIndex == this.props.message.description.length-1) {
+      const { dispatch } = this.props
+      dispatch(finishDescription())
+    }
     return (
       <div>
         <Card style={{marginBottom: "5%"}}>

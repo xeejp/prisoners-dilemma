@@ -44,7 +44,10 @@ class Users extends Component {
 
     return (
       <Card 
-        style={{marginBottom: "5%"}}
+        style={{
+          marginBottom: "5%",
+          marginTop: "5%",
+        }}
       >
         <CardHeader
           title="参加者"

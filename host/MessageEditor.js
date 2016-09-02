@@ -11,6 +11,7 @@ import TextField from 'material-ui/TextField'
 import {Tabs, Tab} from 'material-ui/Tabs'
 import {Card} from 'material-ui/Card'
 import SwipeableViews from 'react-swipeable-views'
+import Snackbar from 'material-ui/Snackbar'
 
 import { fetchContents, updateMessage } from './actions'
 
@@ -24,7 +25,9 @@ class MessageEditor extends Component {
     super(props, context)
     const { message } = this.props
     this.state = {
-      isOpen: false,
+      isOpenDialog: false,
+      isOpenSnackbar: false,
+      snackbarMessage: "",
       slideIndex: 0,
       message: message,
       defaultMessage: {
@@ -67,6 +70,7 @@ class MessageEditor extends Component {
                       mini={true}
                       secondary={true}
                       onTouchTap={this.deleteDescription.bind(this, index)}
+                      disabled={this.props.message.description.length <= 1}
                     >
                       <ImageDelete />
                     </FloatingActionButton>
@@ -102,12 +106,15 @@ class MessageEditor extends Component {
   handleOpen() {
     this.setState({ 
       message: this.props.message,
-      isOpen: true,
+      isOpenDialog: true,
     })
   }
 
   handleClose() {
-    this.setState({ isOpen: false })
+    this.setState({ 
+      message: this.props.message,
+      isOpenDialog: false 
+    })
   }
 
   handleChange(value, event) {
@@ -118,6 +125,12 @@ class MessageEditor extends Component {
     }
     temp[value[value.length - 1]] = event.target.value
     this.setState({ message: message })
+  }
+
+  handleRequestClose() {
+    this.setState({
+      isOpenSnackbar: false,
+    })
   }
 
   handleSlideIndex(value) {
@@ -141,7 +154,6 @@ class MessageEditor extends Component {
     while (!flag) {
       for (var i = 0; i < message.description.length; i++) {
         if (message.description[i].id == id) {
-          console.log("a")
           id++
           break
         } else if (i >= message.description.length-1) {
@@ -157,14 +169,20 @@ class MessageEditor extends Component {
   }
 
   submit() {
+    this.setState({ 
+      isOpenDialog: false,
+      isOpenSnackbar: true,
+      snackbarMessage: "メッセージを送信しました",
+    })
     const { dispatch } = this.props
     dispatch(updateMessage(this.state.message))
-    this.setState({ isOpen: false })
   }
 
   reset() {
     this.setState({
-      isOpen: false,
+      isOpenDialog: false,
+      isOpenSnackbar: true,
+      snackbarMessage: "メッセージを初期化しました",
     })
     const { dispatch } = this.props
     dispatch(updateMessage(this.state.defaultMessage))
@@ -201,8 +219,7 @@ class MessageEditor extends Component {
           title="Message編集"
           actions={actions}
           model={false}
-          open={this.state.isOpen}
-          onRequestClose={this.handleClose.bind(this)}
+          open={this.state.isOpenDialog}
           autoScrollBodyContent={true}
         >
           <Tabs
@@ -220,6 +237,13 @@ class MessageEditor extends Component {
             {this.DescriptionTab()}
           </SwipeableViews>
         </Dialog>
+        <Snackbar
+          open={this.state.isOpenSnackbar}
+          message={this.state.snackbarMessage}
+          autoHideDuration={2000}
+          onRequestClose={this.handleRequestClose.bind(this)}
+        />
+          
       </div>
     )
   }
