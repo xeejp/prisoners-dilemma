@@ -33,12 +33,12 @@ defmodule PrisonersDilemma do
     if isactive do
       %{
         status: nil,
-        is_finish_dexcription: false,
+        is_finish_description: false,
       }
     else
       %{
         status: "noactive",
-        is_finish_dexcription: false,
+        is_finish_description: false,
       }
     end
   end
@@ -133,9 +133,9 @@ defmodule PrisonersDilemma do
 
   def handle_received(data, %{"action" => "finish description"}, id) do
     Logger.debug "finish description"
-    unless data.participants[id].is_finish_dexcription do
+    unless data.participants[id].is_finish_description do
       data = %{data | finish_description: data.finish_description+1}
-      data = put_in(data.participants[id].is_finish_dexcription, true)
+      data = put_in(data.participants[id].is_finish_description, true)
     end
     action = %{
       type: "FINISH_DESCRIPTION",
