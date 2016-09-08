@@ -1,37 +1,63 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import reactCSS from 'reactcss'
+
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 
-const mapStateToProps = ({page, users}) => ({
+const mapStateToProps = ({page, users, joined, finish_description}) => ({
   page,
   users,
+  joined,
+  finish_description,
 })
 
-function createUserStatuStr(page, user) {
+function createHeaderInfoStr(page, finish_description) {
   switch (page) {
-    case "waiting":
-      return null
+    case "description":
+      return "(" + finish_description + "人が説明を読み終えました)"
+    default:
+      return ""
+  }
+}
+
+function createUserStatuStr(page, user) {
+  const style = reactCSS({
+    'default': {
+      selected: {
+        color: '#000000',
+      },
+      nonselect: {
+        color: '#DCDCDC',
+      }
+    }
+  })
+  switch (page) {
     case "description":
       return (
-        <div>
+        <span>
           {
             user.is_finish_description
-            ? <p>既読</p>
-            : <p>未読</p>
+            ? <span style={ style.selected }>既読</span>
+            : <span style={ style.nonselect }>既読</span>
           }
-        </div>
+          <span>・</span>
+          {
+            !user.is_finish_description
+            ? <span style={ style.selected }>未読</span>
+            : <span style={ style.nonselect }>未読</span>
+          }
+        </span>
       )
-    case "experiment":
+    case "experiment": case "result":
       return null
     default:
-      return null
+      return "-"
   }
 }
 
 const User = ({page, user, id}) => (
-
   <tr>
     <td>{id}</td>
     <td>{createUserStatuStr(page, user)}</td>
@@ -40,7 +66,7 @@ const User = ({page, user, id}) => (
 
 class Users extends Component {
   render() {
-    const {users, page} = this.props
+    const {users, page, joined, finish_description} = this.props
 
     return (
       <Card 
@@ -50,7 +76,7 @@ class Users extends Component {
         }}
       >
         <CardHeader
-          title="参加者"
+          title={"登録者 " + joined + "人 " + createHeaderInfoStr(page, finish_description)}
           actAsExpander={true}
           showExpandableButton={true}
         />

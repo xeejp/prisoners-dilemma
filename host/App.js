@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import Divider from 'material-ui/Divider'
+
 import { fetchContents } from './actions'
 
 import PageStepper from './PageStepper'
@@ -27,6 +29,12 @@ class App extends Component {
     return (
       <div>
         <PageStepper />
+        <Divider
+          style={{
+            marginTop: '5%',
+            marginBottom: '5%',
+          }}
+        />
         <HostMessage />
         <Users />
         <MessageEditor />

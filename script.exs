@@ -25,45 +25,88 @@ defmodule PrisonersDilemma do
          experiment: [
          ],
        },
-       join_experiment: 0,
+       joined: 0,
      }}}
   end
 
-  def new_participant(isactive) do
-    if isactive do
-      %{
-        status: nil,
-        is_finish_description: false,
-      }
-    else
-      %{
-        status: "noactive",
-        is_finish_description: false,
+  def new_participant() do
+    %{
+      status: nil,
+      is_join: false,
+      point: 0,
+      is_finish_description: false,
+      pair: nil,
+    }
+  end
+
+  def new_pair(members) do
+    %{
+      members: members,
+      current_round: 1,
+    }
+  end
+
+  def match(data) do
+    %{ participants: participants } = data
+    participant = participants
+                  |>Enum.map(fn({id, state}) ->
+                  {id, %{ 
+                    role: "User1",
+                    point: 0,
+                    pair: nil,
+                  }}
+                  end)
+                  |>Enum.into(%{})
+    group_size = 2
+    pairs = participants
+            |>Enum.map(&elem(&1, 0))
+            |>Enum.shuffle
+            |>Enum.chunk(group_size)
+            |>Enum.map_reduce(1, fn(p, acc) -> {{Integer.to_string(acc), p}, acc + 1}end) |> elem(0)
+            |>Enum.into(%{})
+
+    updater = fn participant, pair, role ->
+      %{ participant |
+        role: role,
+        point: 0,
+        pair: pair
       }
     end
+
+    reducer = fn {group, ids}, {participants, pairs} ->
+      [id1, id2] = ids
+      participants = participants 
+                      |>Map.update!(id1, &updater.(&1, group, "User1"))
+                      |>Map.update!(id2, &updater.(&1, group, "User2"))
+      pairs = Map.put(pairs, group, new_pair(ids))
+      {participants, pairs}
+    end
+    acc = {participants, %{}}
+    {participants, pairs}
+
+    %{data | participants: participants, pairs: pairs}
   end
 
   def join(%{participants: participants} = data, id) do
     unless Map.has_key?(participants, id) do
-      participant = if data.page == "experiment" do
-        new_participant(false)
-      else
-        new_participant(true)
+      participant = new_participant()
+      unless data.page == "experiment" do
+        participant = %{ participant | is_join: true }
       end
       participants = Map.put(participants, id, participant)
       data = %{data | participants: participants}
       unless data.page == "experiment" do
-        data = %{data | join_experiment: Map.size(participants)}
+        data = %{data | joined: Map.size(participants)}
       end
       action = %{
         type: "ADD_USER",
         id: id,
         users: participants,
-        join_experiment: data.join_experiment,
+        joined: data.joined,
       }
       participant_action = %{
         type: "ADD_USER",
-        join_experiment: data.join_experiment,
+        joined: data.joined,
       }
       {:ok, %{"data" => data, "host" => %{action: action}, "participant" => dispatch_to_all(participants, participant_action)}}
     else
@@ -79,10 +122,9 @@ defmodule PrisonersDilemma do
   def handle_received(data, %{"action" => "change page", "params" => params}) do
     data = %{data | page: params}
     unless data.page == "result" do
-      data = Map.put(data, :join_experiment, Map.size(data.participants))
-      data = Map.put(data, :ans_programmer, 0) |> Map.put(:ans_banker, 0) |> Map.put(:ans_each, 0)
+      data = Map.put(data, :joined, Map.size(data.participants))
       participants = Enum.map(data.participants, fn {id, _} ->
-        {id, new_participant(true)} end) |> Enum.into(%{})
+        {id, new_participant()} end) |> Enum.into(%{})
       data = %{data | participants: participants}
     end
     if data.page == "description" do
@@ -93,7 +135,7 @@ defmodule PrisonersDilemma do
       page: data.page,
       message: data.message,
       users: data.participants,
-      join_experiment: data.join_experiment,
+      joined: data.joined,
       finish_description: data.finish_description,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
@@ -102,7 +144,7 @@ defmodule PrisonersDilemma do
          page: data.page,
          message: data.message,
          status: data.participants[id].status,
-         join_experiment: data.join_experiment,
+         joined: data.joined,
        }}} end) |> Enum.into(%{})
      {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
   end
@@ -122,7 +164,7 @@ defmodule PrisonersDilemma do
       page: data.page,
       message: data.message,
       status: data.participants[id].status,
-      join_experiment: data.join_experiment,
+      joined: data.joined,
     }
     {:ok, %{"data" => data, "participant" => %{id => %{action: action}}}}
   end
@@ -140,6 +182,7 @@ defmodule PrisonersDilemma do
     action = %{
       type: "FINISH_DESCRIPTION",
       finish_description: data.finish_description,
+      users: data.participants,
     }
     {:ok, %{"data" => data, "host" => %{action: action}}}
   end

@@ -42,7 +42,7 @@ class MessageEditor extends Component {
     }
   }
 
-  WaitingTab() {
+  ExperimentTab() {
     return (
       <div>
         <p>待機画面に表示するメッセージ</p>
@@ -104,6 +104,8 @@ class MessageEditor extends Component {
   }
 
   handleOpen() {
+    const { dispatch } = this.props
+    dispatch(fetchContents())
     this.setState({ 
       message: this.props.message,
       isOpenDialog: true,
@@ -226,15 +228,15 @@ class MessageEditor extends Component {
             onChange={this.handleSlideIndex.bind(this)}
             value={this.state.slideIndex}
           >
-            <Tab label="待機" value={0} />
-            <Tab label="説明" value={1} />
+            <Tab label="説明" value={0} />
+            <Tab label="実験" value={1} />
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}
             onChangeIndex={this.handleSlideIndex.bind(this)}
           >
-            {this.WaitingTab()}
             {this.DescriptionTab()}
+            {this.ExperimentTab()}
           </SwipeableViews>
         </Dialog>
         <Snackbar

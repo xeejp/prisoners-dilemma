@@ -6,7 +6,7 @@ const initialState = {
     description: [],
     experiment: [],
   },
-  join_experiment: 0,
+  joined: 0,
   finish_description: 0,
 }
 
@@ -17,7 +17,7 @@ function reducer(state = initialState, action) {
       console.log("ADD_USER")
       return Object.assign({}, state, {
         users: action.users,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
       })
 
     case "CHANGE_PAGE":
@@ -25,7 +25,7 @@ function reducer(state = initialState, action) {
         page: action.page,
         message: action.message,
         users: action.users,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
         finish_description: action.finish_description,
       })
 
@@ -35,14 +35,15 @@ function reducer(state = initialState, action) {
         page: action.page,
         message: action.message,
         users: action.participants,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
+        finish_description: action.finish_description,
       })
 
     case "SUBMIT_ANSWER":
       console.log("ok")
       return Object.assign({}, state, {
         users: action.users,
-        join_experiment: action.join_experiment,
+        joined: action.joined,
       })
 
     case "UPDATE_MESSAGE":
@@ -53,6 +54,7 @@ function reducer(state = initialState, action) {
     case "FINISH_DESCRIPTION":
       return Object.assign({}, state, {
         finish_description: action.finish_description,
+        users: action.users,
       })
 
     default:
