@@ -1,6 +1,7 @@
 const initialState = {
   page: "waiting",
   users: {},
+  pairs: {},
   message: {
     waiting: "",
     description: [],
@@ -27,6 +28,7 @@ function reducer(state = initialState, action) {
         users: action.users,
         joined: action.joined,
         finish_description: action.finish_description,
+        pairs: action.pairs,
       })
 
     case "FETCH_CONTENTS":
@@ -37,6 +39,7 @@ function reducer(state = initialState, action) {
         users: action.participants,
         joined: action.joined,
         finish_description: action.finish_description,
+        pairs: action.pairs,
       })
 
     case "SUBMIT_ANSWER":

@@ -8,6 +8,7 @@ import { fetchContents } from './actions'
 import PageStepper from './PageStepper'
 import HostMessage from './HostMessage'
 import Users from './Users'
+import Pairs from './Pairs'
 import MessageEditor from './MessageEditor'
 
 
@@ -37,6 +38,7 @@ class App extends Component {
         />
         <HostMessage />
         <Users />
+        <Pairs />
         <MessageEditor />
       </div>
     )

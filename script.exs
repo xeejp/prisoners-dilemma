@@ -31,11 +31,11 @@ defmodule PrisonersDilemma do
 
   def new_participant() do
     %{
-      status: nil,
-      is_join: false,
-      point: 0,
       is_finish_description: false,
-      pair: nil,
+      role: "visitor",
+      answer: nil,
+      point: 0,
+      pair_id: nil,
     }
   end
 
@@ -43,6 +43,7 @@ defmodule PrisonersDilemma do
     %{
       members: members,
       current_round: 1,
+      logs: %{},
     }
   end
 
@@ -51,25 +52,26 @@ defmodule PrisonersDilemma do
     participant = participants
                   |>Enum.map(fn({id, state}) ->
                   {id, %{ 
-                    role: "User1",
+                    role: "visitor",
                     point: 0,
                     pair: nil,
                   }}
                   end)
                   |>Enum.into(%{})
     group_size = 2
-    pairs = participants
+    groups = participants
             |>Enum.map(&elem(&1, 0))
             |>Enum.shuffle
             |>Enum.chunk(group_size)
             |>Enum.map_reduce(1, fn(p, acc) -> {{Integer.to_string(acc), p}, acc + 1}end) |> elem(0)
             |>Enum.into(%{})
 
-    updater = fn participant, pair, role ->
+    updater = fn participant, pair_id, role ->
+      Logger.debug pair_id
       %{ participant |
         role: role,
         point: 0,
-        pair: pair
+        pair_id: pair_id,
       }
     end
 
@@ -82,17 +84,14 @@ defmodule PrisonersDilemma do
       {participants, pairs}
     end
     acc = {participants, %{}}
-    {participants, pairs}
+    {participants, groups} = Enum.reduce(groups, acc, reducer)
 
-    %{data | participants: participants, pairs: pairs}
+    %{data | participants: participants, pairs: groups}
   end
 
   def join(%{participants: participants} = data, id) do
     unless Map.has_key?(participants, id) do
       participant = new_participant()
-      unless data.page == "experiment" do
-        participant = %{ participant | is_join: true }
-      end
       participants = Map.put(participants, id, participant)
       data = %{data | participants: participants}
       unless data.page == "experiment" do
@@ -129,6 +128,7 @@ defmodule PrisonersDilemma do
     end
     if data.page == "description" do
       data = %{data | finish_description: 0}
+      data = match(data)
     end
     host_action = %{
       type: "CHANGE_PAGE",
@@ -137,13 +137,13 @@ defmodule PrisonersDilemma do
       users: data.participants,
       joined: data.joined,
       finish_description: data.finish_description,
+      pairs: data.pairs,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
       {id, %{action: %{
          type: "CHANGE_PAGE",
          page: data.page,
          message: data.message,
-         status: data.participants[id].status,
          joined: data.joined,
        }}} end) |> Enum.into(%{})
      {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
@@ -163,13 +163,24 @@ defmodule PrisonersDilemma do
       type: "FETCH_CONTENTS",
       page: data.page,
       message: data.message,
-      status: data.participants[id].status,
       joined: data.joined,
     }
     {:ok, %{"data" => data, "participant" => %{id => %{action: action}}}}
   end
 
   def handle_received(data, %{"action" => "submit answer", "params" => params}, id) do
+    participant = data.participants[id]
+    pair = pairs[participant.pair_id]
+    buddy = if id == pair.members[0] do
+      data.participants[pair.members[1]
+    else
+      data.participants[pair.members[0]
+    end
+    participant = %{ participant | answered: params }
+    #if participant.answer != nil and buddy.answer != nil do
+      #log =  %{
+        #round: 
+      
     {:ok, %{"data" => data}}
   end
 
