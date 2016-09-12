@@ -7,6 +7,8 @@ function reducer(state = {}, action) {
         status: action.status,
         message: action.message,
         joined: action.joined,
+        logs: action.logs,
+        own_data: action.own_data,
       })
 
     case "ADD_USER":
@@ -20,12 +22,14 @@ function reducer(state = {}, action) {
         status: action.status,
         message: action.message,
         joined: action.joined,
+        logs: action.logs,
+        own_data: action.own_data,
       })
 
     case "SUBMIT_ANSWER":
       return Object.assign({}, state, {
-        status: action.status,
-        joined: action.joined,
+        logs: action.logs,
+        own_data: action.own_data,
       })
 
     case "UPDATE_MESSAGE":

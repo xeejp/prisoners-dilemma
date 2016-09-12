@@ -46,7 +46,7 @@ function reducer(state = initialState, action) {
       console.log("ok")
       return Object.assign({}, state, {
         users: action.users,
-        joined: action.joined,
+        pairs: action.pairs,
       })
 
     case "UPDATE_MESSAGE":

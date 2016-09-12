@@ -4,14 +4,15 @@ import { connect } from 'react-redux'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 
-const mapStateToProps = ({pairs, users}) => ({
+const mapStateToProps = ({pairs, users, page}) => ({
   pairs,
   users,
+  page,
 })
 
 class Pairs extends Component {
   render() {
-    const {pairs, users} = this.props
+    const {pairs, users, page} = this.props
 
     return (
       <Card 
@@ -41,9 +42,13 @@ class Pairs extends Component {
                 Object.keys(pairs).map(id => (
                   <tr key={id}>
                     <th>{id}</th>
-                    <th>{pairs[id].members[0]+"("+users[pairs[id].members[0]].point+")"}</th>
-                    <th>{pairs[id].members[1]+"("+users[pairs[id].members[1]].point+")"}</th>
+                    <th>{pairs[id].user1+"("+users[pairs[id].user1].point+")"}</th>
+                    <th>{pairs[id].user2+"("+users[pairs[id].user2].point+")"}</th>
                     <th>{pairs[id].current_round}</th>
+                    { page == "experiment"
+                      ? <th>{pairs[id].finished ? "終了" : "実験中"}</th>
+                      : null
+                    }
                   </tr>
                 ))
               }
