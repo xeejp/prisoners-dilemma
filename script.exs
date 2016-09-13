@@ -26,8 +26,8 @@ defmodule PrisonersDilemma do
          ],
        },
        config: %{
-         max_round: 10,
-         gain_table: [[-8, -8], [0, -15], [-15, 0], [-1, -1]]
+         "max_round" => 10,
+         "gain_table" => [[-8, -8], [0, -15], [-15, 0], [-1, -1]]
        },
        joined: 0,
      }}}
@@ -98,7 +98,7 @@ defmodule PrisonersDilemma do
   end
 
   def judge(data, user1, user2) do
-    [[a, b], [c, d], [e, f], [g, h]] = data.config.gain_table
+    [[a, b], [c, d], [e, f], [g, h]] = data.config["gain_table"]
     case {user1.answer, user2.answer} do
       {"yes", "yes"} ->
         user1 = %{ user1 | point: user1.point+a }
@@ -196,6 +196,15 @@ defmodule PrisonersDilemma do
     }
     {:ok, %{"data" => data, "host" => %{action: action}, "participant" => dispatch_to_all(data.participants, action)}}
   end
+  
+  def handle_received(data, %{"action" => "update config", "params" => params}) do
+    data = %{data | config: params}
+    action = %{
+      type: "UPDATE_CONFIG",
+      config: data.config,
+    }
+    {:ok, %{"data" => data, "host" => %{action: action}, "participant" => dispatch_to_all(data.participants, action)}}
+  end
 
   def handle_received(data, %{"action" => "fetch contents"}, id) do
     action = unless data.participants[id].role == "visitor" do
@@ -251,13 +260,13 @@ defmodule PrisonersDilemma do
       }
       pair = %{ pair |
         logs: [log] ++ pair.logs,
-        current_round: unless pair.current_round > data.config.max_round do
+        current_round: unless pair.current_round > data.config["max_round"] do
           pair.current_round+1
         else
           pair.current_round
         end,
       }
-      if pair.current_round > data.config.max_round do
+      if pair.current_round > data.config["max_round"] do
         participant = %{ participant | finished: true }
         buddy = %{ buddy | finished: true }
         pair = %{ pair | finished: true }

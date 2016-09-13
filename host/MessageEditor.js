@@ -210,7 +210,7 @@ class MessageEditor extends Component {
       />,
     ]
     return (
-      <div>
+      <span>
         <FloatingActionButton 
           onClick={this.handleOpen.bind(this)}
           disabled={page != "waiting"}
@@ -246,7 +246,7 @@ class MessageEditor extends Component {
           onRequestClose={this.handleRequestClose.bind(this)}
         />
           
-      </div>
+      </span>
     )
   }
 }

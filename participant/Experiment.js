@@ -28,11 +28,10 @@ class Experiment extends Component {
     return (
       <div>
         {
-          own_data.finished
-          ? <p>実験終了までお待ちください</p>
-          : <div>
+          own_data.role != "visitor"
+          ? <div>
             {
-              own_data.role != "visitor"
+              !own_data.finished
               ? <div>
                 <p>下のような利得表になる時、次の選択肢から選んでください</p>
                 <RaisedButton 
@@ -50,12 +49,13 @@ class Experiment extends Component {
                   no
                 </RaisedButton>
               </div>
-              : <p>ペアが見つかりませんでした</p>
+              : <p>実験終了までお待ちください</p>
             }
+            <br />
+            <Log />
           </div>
+          : <p>ペアが見つかりませんでした</p>
         }
-        <br />
-        <Log />
       </div>
     )
   }

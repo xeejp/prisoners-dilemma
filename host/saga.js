@@ -1,6 +1,6 @@
 import { put, take, call, select, fork } from 'redux-saga/effects'
 
-import { fetchContents, changePage, updateMessage } from './actions'
+import { fetchContents, changePage, updateMessage, updateConfig } from './actions'
 
 function* changePageSaga() {
   while (true) {
@@ -24,10 +24,18 @@ function* updateMessageSaga() {
   }
 }
 
+function* updateConfigSaga() {
+  while(true) {
+    const { payload } = yield take(`${updateConfig}`)
+    yield call(sendData, 'update config', payload)
+  }
+}
+
 function* saga() {
   yield fork(changePageSaga)
   yield fork(fetchContentsSaga)
   yield fork(updateMessageSaga)
+  yield fork(updateConfigSaga)
 }
 
 export default saga

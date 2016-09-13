@@ -2,6 +2,10 @@ const initialState = {
   page: "waiting",
   users: {},
   pairs: {},
+  config: {
+    max_round: 10,
+    gain_table: [[-8, -8], [0, -15], [-15, 0], [-1, -1]]
+  },
   message: {
     waiting: "",
     description: [],
@@ -40,6 +44,7 @@ function reducer(state = initialState, action) {
         joined: action.joined,
         finish_description: action.finish_description,
         pairs: action.pairs,
+        config: action.config,
       })
 
     case "SUBMIT_ANSWER":
@@ -52,6 +57,11 @@ function reducer(state = initialState, action) {
     case "UPDATE_MESSAGE":
       return Object.assign({}, state, {
         message: action.message,
+      })
+
+    case "UPDATE_CONFIG":
+      return Object.assign({}, state, {
+        config: action.config,
       })
 
     case "FINISH_DESCRIPTION":

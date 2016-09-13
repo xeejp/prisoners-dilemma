@@ -10,6 +10,7 @@ import HostMessage from './HostMessage'
 import Users from './Users'
 import Pairs from './Pairs'
 import MessageEditor from './MessageEditor'
+import ConfigEditor from './ConfigEditor'
 
 
 const mapStateToProps = ({}) => ({
@@ -40,6 +41,7 @@ class App extends Component {
         <Users />
         <Pairs />
         <MessageEditor />
+        <ConfigEditor />
       </div>
     )
   }
