@@ -9,6 +9,7 @@ function reducer(state = {}, action) {
         joined: action.joined,
         logs: action.logs,
         own_data: action.own_data,
+        config: action.config,
       })
 
     case "ADD_USER":

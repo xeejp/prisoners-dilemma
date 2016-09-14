@@ -7,9 +7,8 @@ const initialState = {
     gain_table: [[-8, -8], [0, -15], [-15, 0], [-1, -1]]
   },
   message: {
-    waiting: "",
     description: [],
-    experiment: [],
+    experiment: "",
   },
   joined: 0,
   finish_description: 0,

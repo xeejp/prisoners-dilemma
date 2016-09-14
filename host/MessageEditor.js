@@ -31,24 +31,24 @@ class MessageEditor extends Component {
       slideIndex: 0,
       message: message,
       defaultMessage: {
-        waiting: "",
         description: [
-          { id: 0, text: "A"},
-          { id: 1, text: "B"},
-          { id: 2, text: "C"},
+          {id: 0, text: "あなたは2人で旅行をしていたところ、浮浪罪で逮捕された。\nあなたたちは共犯をして強盗を働いたのではないと疑われているが、有罪にするには証拠が不十分である。"},
+          {id: 1, text: "地方検事は隔離された独房で個別に彼らを審問し、各々に対して次のような提示をした。"},
+          {id: 2, text: "「もし君が自白して君の友人が自白しなかったら、君は釈放されるが友人は厳しく処罰されるだろう。もし2人とも自白すれば判決は控えめになるだろう。もし誰も自白しなければ、軽い浮浪罪で処罰されるだろう。」"},
+          {id: 3, text: "ここで約束された懲役は次の表に月単位で示される。もしも合理的ならば彼らはどのような行動を選ぶだろうか。"},
         ],
+        experiment: "",
       },
-
     }
   }
 
   ExperimentTab() {
     return (
       <div>
-        <p>待機画面に表示するメッセージ</p>
+        <p>実験画面に表示するメッセージ</p>
         <TextField
           hintText={"メッセージ"}
-          defaultValue={this.state.message.waiting}
+          defaultValue={this.state.message.experiment}
           onBlur={this.handleChange.bind(this, ["waiting"])}
           multiLine={true}
           fullWidth={true}
@@ -70,7 +70,7 @@ class MessageEditor extends Component {
                       mini={true}
                       secondary={true}
                       onTouchTap={this.deleteDescription.bind(this, index)}
-                      disabled={this.props.message.description.length <= 1}
+                      disabled={this.state.message.description.length <= 1}
                     >
                       <ImageDelete />
                     </FloatingActionButton>
@@ -87,6 +87,35 @@ class MessageEditor extends Component {
                 </tr>
               ))
             }
+            <tr>
+              <td>
+                <FloatingActionButton 
+                  mini={true}
+                  secondary={true}
+                  disabled={true}
+                >
+                  <ImageDelete />
+                </FloatingActionButton>
+              </td>
+              <td>
+                利得表
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <FloatingActionButton 
+                  mini={true}
+                  secondary={true}
+                  disabled={true}
+                >
+                  <ImageDelete />
+                </FloatingActionButton>
+              </td>
+              <td>
+                待機画面
+              </td>
+            </tr>
+
             <tr>
               <td>
                 <FloatingActionButton 

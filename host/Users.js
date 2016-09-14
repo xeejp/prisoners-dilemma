@@ -57,7 +57,7 @@ class Users extends Component {
                     <th>{users[id].role}</th>
                     <th>{users[id].point}</th>
                     <th>{users[id].pair_id}</th>
-                    { page == "experiment"
+                    { page == "experiment" && users[id].role != "visitor"
                       ? <th>{users[id].finished ? "終了" : "実験中"}</th>
                       : null
                     }

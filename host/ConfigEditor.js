@@ -39,20 +39,6 @@ class ConfigEditor extends Component {
     }
   }
 
-  createInputCell(gain_table, user, index) {
-    return (
-      <th style={{borderStyle: "solid"}}>
-        <TextField
-          hintText={"実数"}
-          defaultValue={config.gain_table[user][index]}
-          onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", user, index])}
-          multiLine={false}
-          fullWidth={true}
-        />
-      </th>
-    )
-  }
-
   handleOpen() {
     const { dispatch } = this.props
     dispatch(fetchContents())
@@ -192,20 +178,20 @@ class ConfigEditor extends Component {
           >
             <table>
               <tbody>
-                <tr><th></th><th style={{textAlign: "center"}}>User2</th></tr>
+                <tr><td></td><td style={{textAlign: "center"}}>User2</td></tr>
                 <tr>
-                  <th>User1</th>
-                  <th>
+                  <td>User1</td>
+                  <td>
                     <table>
                       <tbody>
                         <tr>
-                          <th></th>
-                          <th style={{textAlign: "center"}}>自白する</th>
-                          <th style={{textAlign: "center"}}>自白しない</th>
+                          <td></td>
+                          <td style={{textAlign: "center"}}>自白する</td>
+                          <td style={{textAlign: "center"}}>自白しない</td>
                         </tr>
                         <tr>
-                          <th>自白する</th>
-                          <th style={{borderStyle: "solid"}}>
+                          <td>自白する</td>
+                          <td style={{borderStyle: "solid"}}>
                             <TextField
                               hintText={"実数"}
                               defaultValue={config.gain_table[0][0]}
@@ -213,8 +199,8 @@ class ConfigEditor extends Component {
                               multiLine={false}
                               fullWidth={true}
                             />
-                          </th>
-                          <th style={{borderStyle: "solid"}}>
+                          </td>
+                          <td style={{borderStyle: "solid"}}>
                             <TextField
                               hintText={"実数"}
                               defaultValue={config.gain_table[1][0]}
@@ -222,11 +208,11 @@ class ConfigEditor extends Component {
                               multiLine={false}
                               fullWidth={true}
                             />
-                          </th>
+                          </td>
                         </tr>
                         <tr>
-                          <th>自白しない</th>
-                          <th style={{borderStyle: "solid"}}>
+                          <td>自白しない</td>
+                          <td style={{borderStyle: "solid"}}>
                             <TextField
                               hintText={"実数"}
                               defaultValue={config.gain_table[2][0]}
@@ -234,8 +220,8 @@ class ConfigEditor extends Component {
                               multiLine={false}
                               fullWidth={true}
                             />
-                          </th>
-                          <th style={{borderStyle: "solid"}}>
+                          </td>
+                          <td style={{borderStyle: "solid"}}>
                             <TextField
                               hintText={"実数"}
                               defaultValue={config.gain_table[3][0]}
@@ -243,30 +229,30 @@ class ConfigEditor extends Component {
                               multiLine={false}
                               fullWidth={true}
                             />
-                          </th>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
-                  </th>
+                  </td>
                 </tr>
               </tbody>
             </table>
             <table>
               <tbody>
-                <tr><th></th><th style={{textAlign: "center"}}>User2</th></tr>
+                <tr><td></td><td style={{textAlign: "center"}}>User2</td></tr>
                 <tr>
-                  <th>User1</th>
-                  <th>
+                  <td>User1</td>
+                  <td>
                     <table>
                       <tbody>
                         <tr>
-                          <th></th>
-                          <th style={{textAlign: "center"}}>自白する</th>
-                          <th style={{textAlign: "center"}}>自白しない</th>
+                          <td></td>
+                          <td style={{textAlign: "center"}}>自白する</td>
+                          <td style={{textAlign: "center"}}>自白しない</td>
                         </tr>
                         <tr>
-                          <th>自白する</th>
-                          <th style={{borderStyle: "solid"}}>
+                          <td>自白する</td>
+                          <td style={{borderStyle: "solid"}}>
                             <TextField
                               hintText={"実数"}
                               defaultValue={config.gain_table[0][1]}
@@ -274,8 +260,8 @@ class ConfigEditor extends Component {
                               multiLine={false}
                               fullWidth={true}
                             />
-                          </th>
-                          <th style={{borderStyle: "solid"}}>
+                          </td>
+                          <td style={{borderStyle: "solid"}}>
                             <TextField
                               hintText={"実数"}
                               defaultValue={config.gain_table[1][1]}
@@ -283,11 +269,11 @@ class ConfigEditor extends Component {
                               multiLine={false}
                               fullWidth={true}
                             />
-                          </th>
+                          </td>
                         </tr>
                         <tr>
-                          <th>自白しない</th>
-                          <th style={{borderStyle: "solid"}}>
+                          <td>自白しない</td>
+                          <td style={{borderStyle: "solid"}}>
                             <TextField
                               hintText={"実数"}
                               defaultValue={config.gain_table[2][1]}
@@ -295,8 +281,8 @@ class ConfigEditor extends Component {
                               multiLine={false}
                               fullWidth={true}
                             />
-                          </th>
-                          <th style={{borderStyle: "solid"}}>
+                          </td>
+                          <td style={{borderStyle: "solid"}}>
                             <TextField
                               hintText={"実数"}
                               defaultValue={config.gain_table[3][1]}
@@ -304,11 +290,11 @@ class ConfigEditor extends Component {
                               multiLine={false}
                               fullWidth={true}
                             />
-                          </th>
+                          </td>
                         </tr>
                       </tbody>
                     </table>
-                  </th>
+                  </td>
                 </tr>
               </tbody>
             </table>
