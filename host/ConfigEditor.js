@@ -39,17 +39,17 @@ class ConfigEditor extends Component {
     }
   }
 
-  ExperimentTab() {
+  createInputCell(gain_table, user, index) {
     return (
-      <div>
-      </div>
-    )
-  }
-
-  DescriptionTab() {
-    return (
-      <div>
-      </div>
+      <th style={{borderStyle: "solid"}}>
+        <TextField
+          hintText={"実数"}
+          defaultValue={config.gain_table[user][index]}
+          onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", user, index])}
+          multiLine={false}
+          fullWidth={true}
+        />
+      </th>
     )
   }
 
@@ -59,6 +59,7 @@ class ConfigEditor extends Component {
     this.setState({ 
       config: this.props.config,
       isOpenDialog: true,
+      slideIndex: 0,
     })
   }
 
@@ -101,17 +102,6 @@ class ConfigEditor extends Component {
     this.setState({ config: config, disabled: false })
   }
 
-  handleChange(value, event) {
-    var config = Object.assign({}, this.state.config)
-    var temp = config
-    for (var i = 0; i < value.length - 1; i++) {
-      temp = temp[value[i]]
-    }
-    temp[value[value.length - 1]] = event.target.value
-    console.log(config)
-    this.setState({ config: config })
-  }
-
   handleRequestClose() {
     this.setState({
       isOpenSnackbar: false,
@@ -128,7 +118,7 @@ class ConfigEditor extends Component {
     this.setState({ 
       isOpenDialog: false,
       isOpenSnackbar: true,
-      snackbarMessage: "メッセージを送信しました",
+      snackbarMessage: "設定を送信しました",
     })
     const { dispatch } = this.props
     dispatch(updateConfig(this.state.config))
@@ -138,7 +128,7 @@ class ConfigEditor extends Component {
     this.setState({
       isOpenDialog: false,
       isOpenSnackbar: true,
-      snackbarMessage: "メッセージを初期化しました",
+      snackbarMessage: "設定を初期化しました",
     })
     const { dispatch } = this.props
     dispatch(updateConfig(this.state.defaultConfig))
@@ -174,7 +164,7 @@ class ConfigEditor extends Component {
           <ActionSettings />
         </FloatingActionButton>
         <Dialog
-          title="Message編集"
+          title="設定編集"
           actions={actions}
           model={false}
           open={this.state.isOpenDialog}
@@ -189,118 +179,140 @@ class ConfigEditor extends Component {
             fullWidth={true}
           />
           <p>利得表</p>
-          <table>
-            <tbody>
-              <tr><th></th><th>User2</th></tr>
-              <tr>
-                <th>User1</th>
-                <th>
-                  <Table
-                    selectable={false}
-                  >
-                    <TableHeader
-                      displaySelectAll={false}
-                      adjustForCheckbox={false}
-                    >
-                      <TableRow>
-                        <TableHeaderColumn></TableHeaderColumn>
-                        <TableHeaderColumn>自白する</TableHeaderColumn>
-                        <TableHeaderColumn>自白しない</TableHeaderColumn>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody
-                      displayRowCheckbox={false}
-                    >
-                      <TableRow>
-                        <TableHeaderColumn>自白する</TableHeaderColumn>
-                        <TableHeaderColumn>
-                          <p>USER1</p>
-                          <TextField
-                            hintText={"USER1"}
-                            defaultValue={config.gain_table[0][0]}
-                            onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 0, 0])}
-                            multiLine={false}
-                            fullWidth={true}
-                          />
-                          <br />
-                          <p>USER2</p>
-                          <TextField
-                            hintText={"USER2"}
-                            defaultValue={config.gain_table[0][1]}
-                            onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 0, 1])}
-                            multiLine={false}
-                            fullWidth={true}
-                          />
-                        </TableHeaderColumn>
-                        <TableHeaderColumn>
-                          <p>USER1</p>
-                          <TextField
-                            hintText={"USER1"}
-                            defaultValue={config.gain_table[1][0]}
-                            onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 1, 0])}
-                            multiLine={false}
-                            fullWidth={true}
-                          />
-                          <br />
-                          <p>USER2</p>
-                          <TextField
-                            hintText={"USER2"}
-                            defaultValue={config.gain_table[1][1]}
-                            onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 1, 1])}
-                            multiLine={false}
-                            fullWidth={true}
-                          />
-                        </TableHeaderColumn>
-                      </TableRow>
-                      <TableRow>
-                        <TableHeaderColumn>自白しない</TableHeaderColumn>
-                        <TableHeaderColumn>
-                          <p>USER1</p>
-                          <TextField
-                            hintText={"USER1"}
-                            defaultValue={config.gain_table[2][0]}
-                            onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 2, 0])}
-                            multiLine={false}
-                            fullWidth={true}
-                          />
-                          <br />
-                          <p>USER2</p>
-                          <TextField
-                            hintText={"USER2"}
-                            defaultValue={config.gain_table[2][1]}
-                            onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 2, 1])}
-                            multiLine={false}
-                            fullWidth={true}
-                          />
-                        </TableHeaderColumn>
-                        <TableHeaderColumn>
-                          <p>USER1</p>
-                          <TextField
-                            hintText={"USER1"}
-                            defaultValue={config.gain_table[3][0]}
-                            onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 3, 0])}
-                            multiLine={false}
-                            fullWidth={true}
-                          />
-                          <br />
-                          <p>USER2</p>
-                          <TextField
-                            hintText={"USER2"}
-                            defaultValue={config.gain_table[3][1]}
-                            onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 3, 1])}
-                            multiLine={false}
-                            fullWidth={true}
-                          />
-                        </TableHeaderColumn>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </th>
-              </tr>
-            </tbody>
-          </table>
-
-
+          <Tabs
+            onChange={this.handleSlideIndex.bind(this)}
+            value={this.state.slideIndex}
+          >
+            <Tab label="USER1" value={0} />
+            <Tab label="USER2" value={1} />
+          </Tabs>
+          <SwipeableViews
+            index={this.state.slideIndex}
+            onChangeIndex={this.handleSlideIndex.bind(this)}
+          >
+            <table>
+              <tbody>
+                <tr><th></th><th style={{textAlign: "center"}}>User2</th></tr>
+                <tr>
+                  <th>User1</th>
+                  <th>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <th></th>
+                          <th style={{textAlign: "center"}}>自白する</th>
+                          <th style={{textAlign: "center"}}>自白しない</th>
+                        </tr>
+                        <tr>
+                          <th>自白する</th>
+                          <th style={{borderStyle: "solid"}}>
+                            <TextField
+                              hintText={"実数"}
+                              defaultValue={config.gain_table[0][0]}
+                              onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 0, "0"])}
+                              multiLine={false}
+                              fullWidth={true}
+                            />
+                          </th>
+                          <th style={{borderStyle: "solid"}}>
+                            <TextField
+                              hintText={"実数"}
+                              defaultValue={config.gain_table[1][0]}
+                              onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 1, "0"])}
+                              multiLine={false}
+                              fullWidth={true}
+                            />
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>自白しない</th>
+                          <th style={{borderStyle: "solid"}}>
+                            <TextField
+                              hintText={"実数"}
+                              defaultValue={config.gain_table[2][0]}
+                              onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 2, "0"])}
+                              multiLine={false}
+                              fullWidth={true}
+                            />
+                          </th>
+                          <th style={{borderStyle: "solid"}}>
+                            <TextField
+                              hintText={"実数"}
+                              defaultValue={config.gain_table[3][0]}
+                              onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 3, "0"])}
+                              multiLine={false}
+                              fullWidth={true}
+                            />
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+            <table>
+              <tbody>
+                <tr><th></th><th style={{textAlign: "center"}}>User2</th></tr>
+                <tr>
+                  <th>User1</th>
+                  <th>
+                    <table>
+                      <tbody>
+                        <tr>
+                          <th></th>
+                          <th style={{textAlign: "center"}}>自白する</th>
+                          <th style={{textAlign: "center"}}>自白しない</th>
+                        </tr>
+                        <tr>
+                          <th>自白する</th>
+                          <th style={{borderStyle: "solid"}}>
+                            <TextField
+                              hintText={"実数"}
+                              defaultValue={config.gain_table[0][1]}
+                              onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 0, "1"])}
+                              multiLine={false}
+                              fullWidth={true}
+                            />
+                          </th>
+                          <th style={{borderStyle: "solid"}}>
+                            <TextField
+                              hintText={"実数"}
+                              defaultValue={config.gain_table[1][1]}
+                              onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 1, "1"])}
+                              multiLine={false}
+                              fullWidth={true}
+                            />
+                          </th>
+                        </tr>
+                        <tr>
+                          <th>自白しない</th>
+                          <th style={{borderStyle: "solid"}}>
+                            <TextField
+                              hintText={"実数"}
+                              defaultValue={config.gain_table[2][1]}
+                              onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 2, "1"])}
+                              multiLine={false}
+                              fullWidth={true}
+                            />
+                          </th>
+                          <th style={{borderStyle: "solid"}}>
+                            <TextField
+                              hintText={"実数"}
+                              defaultValue={config.gain_table[3][1]}
+                              onChange={this.handleChangeOnlyNum.bind(this, ["gain_table", 3, "1"])}
+                              multiLine={false}
+                              fullWidth={true}
+                            />
+                          </th>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </SwipeableViews>
 
         </Dialog>
         <Snackbar

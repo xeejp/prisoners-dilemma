@@ -7,7 +7,8 @@ import Log from './Log'
 
 import { submitAnswer } from './actions'
 
-const mapStateToProps = ({ message, own_data }) => ({
+const mapStateToProps = ({ config, message, own_data }) => ({
+  config,
   message,
   own_data,
 })
@@ -24,7 +25,7 @@ class Experiment extends Component {
   }
 
   render() {
-    const { own_data } = this.props
+    const { own_data, config } = this.props
     return (
       <div>
         {

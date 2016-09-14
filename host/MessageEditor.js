@@ -109,6 +109,7 @@ class MessageEditor extends Component {
     this.setState({ 
       message: this.props.message,
       isOpenDialog: true,
+      slideIndex: 0,
     })
   }
 

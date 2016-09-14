@@ -123,9 +123,7 @@ defmodule PrisonersDilemma do
       participant = new_participant()
       participants = Map.put(participants, id, participant)
       data = %{data | participants: participants}
-      unless data.page == "experiment" do
-        data = %{data | joined: Map.size(participants)}
-      end
+      data = %{data | joined: Map.size(participants)}
       action = %{
         type: "ADD_USER",
         id: id,
