@@ -17,21 +17,21 @@ class Log extends Component {
     if (own_data.role == "User1") {
       return (
         <tr key={log.round}>
-          <th>{log.round}</th>
-          <th>{log.answer1}</th>
-          <th>{log.answer2}</th>
-          <th>{log.point1}</th>
-          <th>{log.point2}</th>
+          <td>{log.round}</td>
+          <td>{log.answer1}</td>
+          <td>{log.answer2}</td>
+          <td>{log.point1}</td>
+          <td>{log.point2}</td>
         </tr>
       )
     } else {
       return (
         <tr key={log.round}>
-          <th>{log.round}</th>
-          <th>{log.answer2}</th>
-          <th>{log.answer1}</th>
-          <th>{log.point2}</th>
-          <th>{log.point1}</th>
+          <td>{log.round}</td>
+          <td>{log.answer2}</td>
+          <td>{log.answer1}</td>
+          <td>{log.point2}</td>
+          <td>{log.point1}</td>
         </tr>
       )
     }

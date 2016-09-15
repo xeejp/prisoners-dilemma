@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
+import Ranking from './Ranking'
+import Log from './Log'
+
 const mapStateToProps = ({}) => ({
 })
 
@@ -16,7 +19,8 @@ class Result extends Component {
   render() {
     return (
       <div>
-        <p>result</p>
+        <Ranking />
+        <Log />
       </div>
     )
   }

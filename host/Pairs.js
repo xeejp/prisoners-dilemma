@@ -41,12 +41,12 @@ class Pairs extends Component {
               {
                 Object.keys(pairs).map(id => (
                   <tr key={id}>
-                    <th>{id}</th>
-                    <th>{pairs[id].user1+"("+users[pairs[id].user1].point+")"}</th>
-                    <th>{pairs[id].user2+"("+users[pairs[id].user2].point+")"}</th>
-                    <th>{pairs[id].current_round}</th>
+                    <td>{id}</td>
+                    <td>{pairs[id].user1+"("+users[pairs[id].user1].point+")"}</td>
+                    <td>{pairs[id].user2+"("+users[pairs[id].user2].point+")"}</td>
+                    <td>{pairs[id].current_round}</td>
                     { page == "experiment"
-                      ? <th>{pairs[id].finished ? "終了" : "実験中"}</th>
+                      ? <td>{pairs[id].finished ? "終了" : "実験中"}</td>
                       : null
                     }
                   </tr>

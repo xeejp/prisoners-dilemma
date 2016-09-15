@@ -9,6 +9,7 @@ import PageStepper from './PageStepper'
 import HostMessage from './HostMessage'
 import Users from './Users'
 import Pairs from './Pairs'
+import GainTableCard from './GainTableCard'
 import MessageEditor from './MessageEditor'
 import ConfigEditor from './ConfigEditor'
 
@@ -40,6 +41,7 @@ class App extends Component {
         <HostMessage />
         <Users />
         <Pairs />
+        <GainTableCard />
         <MessageEditor />
         <ConfigEditor />
       </div>

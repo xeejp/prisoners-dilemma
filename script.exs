@@ -19,8 +19,8 @@ defmodule PrisonersDilemma do
          description: [
            %{id: 0, text: "あなたは2人で旅行をしていたところ、浮浪罪で逮捕された。\nあなたたちは共犯をして強盗を働いたのではないと疑われているが、有罪にするには証拠が不十分である。"},
            %{id: 1, text: "地方検事は隔離された独房で個別に彼らを審問し、各々に対して次のような提示をした。"},
-           %{id: 2, text: "「もし君が自白して君の友人が自白しなかったら、君は釈放されるが友人は厳しく処罰されるだろう。もし2人とも自白すれば判決は控えめになるだろう。もし誰も自白しなければ、軽い浮浪罪で処罰されるだろう。」"},
-           %{id: 3, text: "ここで約束された懲役は次の表に月単位で示される。もしも合理的ならば彼らはどのような行動を選ぶだろうか。"},
+           %{id: 2, text: "「もし君が自白して君の友人が自白しなかったら、君は釈放されるが友人は厳しく処罰されるだろう。\nもし2人とも自白すれば判決は控えめになるだろう。\nもし誰も自白しなければ、軽い浮浪罪で処罰されるだろう。」"},
+           %{id: 3, text: "ここで約束された懲役は次の表に月単位で示される。\nもしも合理的ならば彼らはどのような行動を選ぶだろうか。"},
          ],
          experiment: "",
        },
@@ -38,7 +38,9 @@ defmodule PrisonersDilemma do
       role: "visitor",
       answer: nil,
       point: 0,
+      ans_yes: 0,
       pair_id: nil,
+      buddy_id: nil,
       finished: false,
     }
   end
@@ -74,19 +76,20 @@ defmodule PrisonersDilemma do
             |>Enum.map_reduce(1, fn(p, acc) -> {{Integer.to_string(acc), p}, acc + 1}end) |> elem(0)
             |>Enum.into(%{})
 
-    updater = fn participant, pair_id, role ->
+    updater = fn participant, pair_id, buddy_id, role ->
       %{ participant |
         role: role,
         point: 0,
         pair_id: pair_id,
+        buddy_id: buddy_id,
       }
     end
 
     reducer = fn {group, ids}, {participants, pairs} ->
       [id1, id2] = ids
       participants = participants 
-                      |>Map.update!(id1, &updater.(&1, group, "User1"))
-                      |>Map.update!(id2, &updater.(&1, group, "User2"))
+                      |>Map.update!(id1, &updater.(&1, group, id2, "User1"))
+                      |>Map.update!(id2, &updater.(&1, group, id1, "User2"))
       pairs = Map.put(pairs, group, new_pair(id1, id2))
       {participants, pairs}
     end
@@ -154,6 +157,7 @@ defmodule PrisonersDilemma do
           is_finish_description: false,
           finished: false,
           point: 0,
+          ans_yes: 0,
         }} end) |> Enum.into(%{})
       data = %{data | participants: participants}
     end
@@ -165,6 +169,7 @@ defmodule PrisonersDilemma do
       type: "CHANGE_PAGE",
       page: data.page,
       message: data.message,
+      config: data.config,
       users: data.participants,
       joined: data.joined,
       finish_description: data.finish_description,
@@ -175,12 +180,18 @@ defmodule PrisonersDilemma do
          type: "CHANGE_PAGE",
          page: data.page,
          message: data.message,
+         config: data.config,
          joined: data.joined,
          own_data: data.participants[id],
+         users: if data.page == "result" do
+           data.participants
+         else
+           nil
+         end,
          logs: unless data.participants[id].role == "visitor" do
            data.pairs[data.participants[id].pair_id].logs
          else
-           %{}
+           nil
          end,
        }}} end) |> Enum.into(%{})
      {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
@@ -208,21 +219,34 @@ defmodule PrisonersDilemma do
     action = unless data.participants[id].role == "visitor" do
       %{
         type: "FETCH_CONTENTS",
+        own_id: id,
         page: data.page,
         message: data.message,
         config: data.config,
         own_data: data.participants[id],
         logs: data.pairs[data.participants[id].pair_id].logs,
         joined: data.joined,
+        users: if data.page == "result" do
+          data.participants
+        else
+          nil
+        end,
       }
     else
       %{
         type: "FETCH_CONTENTS",
+        own_id: id,
         page: data.page,
         message: data.message,
         config: data.config,
         own_data: data.participants[id],
         joined: data.joined,
+        logs: nil,
+        users: if data.page == "result" do
+          data.participants
+        else
+          nil
+        end,
       }
     end
     {:ok, %{"data" => data, "participant" => %{id => %{action: action}}}}
@@ -239,6 +263,9 @@ defmodule PrisonersDilemma do
     buddy = data.participants[buddy_id]
 
     participant = %{ participant | answer: params }
+    if params == "yes" do
+      participant = %{ participant | ans_yes: participant.ans_yes+1 }
+    end
     data = put_in(data.participants[id], participant)
     if participant.answer != nil and buddy.answer != nil do
       Logger.debug "answerd each participants"
@@ -258,6 +285,7 @@ defmodule PrisonersDilemma do
         answer1: data.participants[pair.user1].answer,
         answer2: data.participants[pair.user2].answer,
       }
+      Logger.debug data.config["max_round"]
       pair = %{ pair |
         logs: [log] ++ pair.logs,
         current_round: unless pair.current_round > data.config["max_round"] do
@@ -266,7 +294,7 @@ defmodule PrisonersDilemma do
           pair.current_round
         end,
       }
-      if pair.current_round > data.config["max_round"] do
+      if pair.current_round >= data.config["max_round"] do
         participant = %{ participant | finished: true }
         buddy = %{ buddy | finished: true }
         pair = %{ pair | finished: true }

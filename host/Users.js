@@ -53,12 +53,12 @@ class Users extends Component {
               {
                 Object.keys(users).map(id => (
                   <tr key={id}>
-                    <th>{id}</th>
-                    <th>{users[id].role}</th>
-                    <th>{users[id].point}</th>
-                    <th>{users[id].pair_id}</th>
+                    <td>{id}</td>
+                    <td>{users[id].role}</td>
+                    <td>{users[id].point}</td>
+                    <td>{users[id].pair_id}</td>
                     { page == "experiment" && users[id].role != "visitor"
-                      ? <th>{users[id].finished ? "終了" : "実験中"}</th>
+                      ? <td>{users[id].finished ? "終了" : "実験中"}</td>
                       : null
                     }
                   </tr>

@@ -10,9 +10,51 @@ import { submitAnswer } from './actions'
 
 const mapStateToProps = ({ config, message, own_data }) => ({
   config,
-  message,
-  own_data,
+    message,
+    own_data,
 })
+
+const GainCell = ({ gain_table, index, role }) => (
+  <td style={{borderStyle: "solid", width: '40%', textAlign: "center"}}>
+    {
+      role != "User2"
+      ? gain_table[index][0] + ", " + gain_table[index][1]
+      : gain_table[index][1] + ", " + gain_table[index][0]
+    }
+  </td>
+)
+
+const GainTable = ({gain_table, role}) => (
+  <table>
+    <tbody>
+      <tr><td></td><td style={{textAlign: "center"}}>相手</td></tr>
+      <tr>
+        <td>自分</td>
+        <td style={{width: '100%'}}>
+          <table>
+            <tbody>
+              <tr>
+                <td></td>
+                <td style={{textAlign: "center"}}>自白する</td>
+                <td style={{textAlign: "center"}}>自白しない</td>
+              </tr>
+              <tr>
+                <td style={{width: '20%'}}>自白する</td>
+                <GainCell gain_table={gain_table} index={0} role={role} />
+                <GainCell gain_table={gain_table} index={1} role={role} />
+              </tr>
+              <tr>
+                <td>自白しない</td>
+                <GainCell gain_table={gain_table} index={2} role={role} />
+                <GainCell gain_table={gain_table} index={3} role={role} />
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+)
 
 class Experiment extends Component {
   constructor(props, context) {
@@ -41,43 +83,7 @@ class Experiment extends Component {
                     title="利得表"
                   />
                   <CardText>
-                    <table>
-                      <tbody>
-                        <tr><td></td><td style={{textAlign: "center"}}>相手</td></tr>
-                        <tr>
-                          <td>自分</td>
-                          <td style={{width: '100%'}}>
-                            <table>
-                              <tbody>
-                                <tr>
-                                  <td></td>
-                                  <td style={{textAlign: "center"}}>自白する</td>
-                                  <td style={{textAlign: "center"}}>自白しない</td>
-                                </tr>
-                                <tr>
-                                  <td style={{width: '20%'}}>自白する</td>
-                                  <td style={{borderStyle: "solid", width: '40%', textAlign: "center"}}>
-                                    {config.gain_table[0][0] + ", " + config.gain_table[0][1]}
-                                  </td>
-                                  <td style={{borderStyle: "solid", width: '40%', textAlign: "center"}}>
-                                    {config.gain_table[1][0] + ", " + config.gain_table[1][1]}
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>自白しない</td>
-                                  <td style={{borderStyle: "solid", width: '40%', textAlign: "center"}}>
-                                    {config.gain_table[2][0] + ", " + config.gain_table[2][1]}
-                                  </td>
-                                  <td style={{borderStyle: "solid", width: '40%', textAlign: "center"}}>
-                                    {config.gain_table[3][0] + ", " + config.gain_table[3][1]}
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <GainTable gain_table={config.gain_table} role={own_data.role} />
                   </CardText>
                 </Card>
                 <br />
