@@ -202,7 +202,7 @@ class ConfigEditor extends Component {
         >
           <p>ラウンド数</p>
           <TextField
-            hintText={"ラウンド数(正の整数やで)"}
+            hintText={"ラウンド数"}
             defaultValue={config.max_round}
             onChange={this.handleChangeOnlyNaturalNum.bind(this, ["max_round"])}
             multiLine={false}
