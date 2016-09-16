@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Step, Stepper, StepButton} from 'material-ui/Stepper'
 import RaisedButton from 'material-ui/RaisedButton'
 
-import { changePage } from './actions'
+import { changePage, rematch } from './actions'
 
 import { getPage } from 'util/index'
 
@@ -61,6 +61,11 @@ class PageStepper extends Component {
     dispatch(changePage(page))
   }
 
+  rematchButton() {
+    const { dispatch } = this.props
+    dispatch(rematch())
+  }
+
   render() {
     const { page, active_pair } = this.props
     if (page == "experiment" && active_pair <= 0){
@@ -85,14 +90,19 @@ class PageStepper extends Component {
         <div>
           <RaisedButton
             label="戻る" 
-            style={{float: "left"}}
             onClick={this.backPage.bind(this)}
           />
           <RaisedButton 
             label="次へ" 
-            style={{float: "right"}}
+            style={{marginLeft: '5%'}}
             primary={true}
             onClick={this.nextPage.bind(this)}
+          />
+          <RaisedButton 
+            label="再マッチング" 
+            style={{float: "right"}}
+            primary={true}
+            onClick={this.rematchButton.bind(this)}
           />
         </div>
       </div>

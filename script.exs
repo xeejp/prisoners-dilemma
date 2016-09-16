@@ -206,6 +206,18 @@ defmodule PrisonersDilemma do
      {:ok, %{"data" => data, "host" => %{action: host_action}, "participant" => participant_action}}
   end
 
+  def handle_received(data, %{"action" => "rematch", "params" => params}) do
+    data = match(data)
+    Logger.debug " hjklk"
+    action = %{
+      type: "REMATCH",
+      users: data.participants,
+      pairs: data.pairs,
+      active_pair: data.active_pair,
+    }
+    {:ok, %{"data" => data, "host" => %{action: action}}}
+  end
+
   def handle_received(data, %{"action" => "update message", "params" => params}) do
     data = %{data | message: params}
     action = %{

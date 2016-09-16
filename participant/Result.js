@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import Ranking from './Ranking'
 import Log from './Log'
+import Chart from './Chart'
 
 const mapStateToProps = ({own_data}) => ({
   own_data
@@ -22,7 +23,14 @@ class Result extends Component {
     return (
       <div>
         <Ranking />
-        {own_data.role != "visitor" ? <Log /> : null}
+        {
+          own_data.role != "visitor" 
+          ? <div>
+              <Log /> 
+              <Chart />
+            </div>
+          : null
+        }
       </div>
     )
   }

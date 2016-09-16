@@ -73,6 +73,13 @@ function reducer(state = initialState, action) {
         users: action.users,
       })
 
+    case "REMATCH":
+      return Object.assign({}, state, {
+        users: action.users,
+        pairs: action.pairs,
+        active_pair: action.active_pair,
+      })
+
     default:
       return state
   }
