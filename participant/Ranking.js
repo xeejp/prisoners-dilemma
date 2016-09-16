@@ -37,24 +37,23 @@ class Log extends Component {
       ranking.push({
         id: ranking_id[i],
         point: users[ranking_id[i]].point,
-        own_ratio: users[ranking_id[i]].ans_yes/config.max_round,
-        buddy_ratio: users[users[ranking_id[i]].buddy_id].ans_yes/config.max_round,
-        isMe: flag,
+        own_ratio: users[ranking_id[i]].ans_yes/config.max_round*100,
+        buddy_ratio: users[users[ranking_id[i]].buddy_id].ans_yes/config.max_round*100,
       })
     }
-    console.log(flag)
-    if (!flag) {
-      ranking.push({
-        id: own_id,
-        point: own_data.point,
-        own_ratio: own_data.ans_yes/config.max_round,
-        buddy_ratio: users[own_data.buddy_id].ans_yes/config.max_round,
-        isMe: true
-      })
+    let data = {
+      id: own_id,
+      point: own_data.point,
+      own_ratio: own_data.ans_yes/config.max_round*100,
+      buddy_ratio: users[own_data.buddy_id].ans_yes/config.max_round*100,
     }
 
-    console.log(ranking)
+    let rank = 0
+    for (let i = 0; i < ranking_id.length; i++) {
+      if (ranking_id[i] == own_id) rank = i+1
+    }
 
+    console.log(rank)
 
     return (
       <Card 
@@ -73,25 +72,39 @@ class Log extends Component {
             <thead>
               <tr>
                 <th>順位</th>
-                <th>ID</th>
                 <th>ポイント</th>
                 <th>"自白する"を選んだ割合(自分)</th>
                 <th>"自白する"を選んだ割合(相手)</th>
               </tr>
             </thead>
-            <tbody>
+            <thead>
               {
                 ranking.map((data, index) => (
-                  <tr key={index}>
-                    <td>{index+1}</td>
-                    <td>{data.id}</td>
+                  <tr 
+                    key={index} 
+                    style={{backgroundColor: (index+1==rank)?"#F0F0F0":"#FFFFFF"}}>
+                    {index+1 == rank
+                      ? <td>{index+1+"(あなた)"}</td>
+                      : <td>{index+1}</td>
+                    }
                     <td>{data.point}</td>
-                    <td>{data.own_ratio}</td>
-                    <td>{data.buddy_ratio}</td>
+                    <td>{Math.round(data.own_ratio*10)/10+"%"}</td>
+                    <td>{Math.round(data.buddy_ratio*10)/10+"%"}</td>
                   </tr>
                 ))
               }
-            </tbody>
+            </thead>
+              {!flag && own_data.role != "visitor"
+                ? <tbody>
+                    <tr style={{backgroundColor: "#F0F0F0"}}>
+                      <td>{rank+"(あなた)"}</td>
+                      <td>{data.point}</td>
+                      <td>{Math.round(data.own_ratio*10)/10+"%"}</td>
+                      <td>{Math.round(data.buddy_ratio*10)/10+"%"}</td>
+                    </tr>
+                  </tbody>
+                : null
+              }
           </table>
         </CardText>
       </Card>

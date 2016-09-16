@@ -20,8 +20,8 @@ class Log extends Component {
           <td>{log.round}</td>
           <td>{log.answer1}</td>
           <td>{log.answer2}</td>
+          <td>{log.round_point1}</td>
           <td>{log.point1}</td>
-          <td>{log.point2}</td>
         </tr>
       )
     } else {
@@ -30,8 +30,8 @@ class Log extends Component {
           <td>{log.round}</td>
           <td>{log.answer2}</td>
           <td>{log.answer1}</td>
+          <td>{log.round_point2}</td>
           <td>{log.point2}</td>
-          <td>{log.point1}</td>
         </tr>
       )
     }
@@ -59,8 +59,8 @@ class Log extends Component {
                 <th>ラウンド</th>
                 <th>自分の選択</th>
                 <th>相手の選択</th>
-                <th>自分のポイント</th>
-                <th>相手のポイント</th>
+                <th>ラウンドのポイント</th>
+                <th>総ポイント</th>
               </tr>
             </thead>
             <tbody>

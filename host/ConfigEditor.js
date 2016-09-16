@@ -76,7 +76,7 @@ class ConfigEditor extends Component {
       slideIndex: 0,
       config: config,
       defaultConfig: {
-        max_round: 10,
+        max_round: 1,
         gain_table: [[-8, -8], [0, -15], [-15, 0], [-1, -1]]
       },
 

@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import Ranking from './Ranking'
 import Log from './Log'
 
-const mapStateToProps = ({}) => ({
+const mapStateToProps = ({own_data}) => ({
+  own_data
 })
 
 class Result extends Component {
@@ -17,13 +18,14 @@ class Result extends Component {
   }
 
   render() {
+    const {own_data} = this.props
     return (
       <div>
         <Ranking />
-        <Log />
+        {own_data.role != "visitor" ? <Log /> : null}
       </div>
     )
   }
 }
 
-export default connect()(Result)
+export default connect(mapStateToProps)(Result)

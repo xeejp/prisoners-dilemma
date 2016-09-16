@@ -9,8 +9,9 @@ import { getPage } from 'util/index'
 
 const pages = ["waiting", "description", "experiment", "result"]
 
-const mapStateToProps = ({page, }) => ({
+const mapStateToProps = ({page, active_pair}) => ({
   page,
+  active_pair,
 })
 
 class PageStepper extends Component {
@@ -61,7 +62,11 @@ class PageStepper extends Component {
   }
 
   render() {
-    const { page } = this.props
+    const { page, active_pair } = this.props
+    if (page == "experiment" && active_pair <= 0){
+    const { dispatch } = this.props
+    dispatch(changePage("result"))
+    }
     const steps = []
     for (let i = 0; i < pages.length; i++) {
       steps[i] = (

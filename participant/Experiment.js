@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 import RaisedButton from 'material-ui/RaisedButton'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
+import Snackbar from 'material-ui/Snackbar'
 
 import Log from './Log'
 
@@ -10,8 +11,8 @@ import { submitAnswer } from './actions'
 
 const mapStateToProps = ({ config, message, own_data }) => ({
   config,
-    message,
-    own_data,
+  message,
+  own_data,
 })
 
 const GainCell = ({ gain_table, index, role }) => (
@@ -31,25 +32,47 @@ const GainTable = ({gain_table, role}) => (
       <tr>
         <td>自分</td>
         <td style={{width: '100%'}}>
-          <table>
-            <tbody>
-              <tr>
-                <td></td>
-                <td style={{textAlign: "center"}}>自白する</td>
-                <td style={{textAlign: "center"}}>自白しない</td>
-              </tr>
-              <tr>
-                <td style={{width: '20%'}}>自白する</td>
-                <GainCell gain_table={gain_table} index={0} role={role} />
-                <GainCell gain_table={gain_table} index={1} role={role} />
-              </tr>
-              <tr>
-                <td>自白しない</td>
-                <GainCell gain_table={gain_table} index={2} role={role} />
-                <GainCell gain_table={gain_table} index={3} role={role} />
-              </tr>
-            </tbody>
-          </table>
+          {
+            role=="User1"
+            ? <table>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td style={{textAlign: "center"}}>自白する</td>
+                    <td style={{textAlign: "center"}}>自白しない</td>
+                  </tr>
+                  <tr>
+                    <td style={{width: '20%'}}>自白する</td>
+                    <GainCell gain_table={gain_table} index={0} role={role} />
+                    <GainCell gain_table={gain_table} index={1} role={role} />
+                  </tr>
+                  <tr>
+                    <td>自白しない</td>
+                    <GainCell gain_table={gain_table} index={2} role={role} />
+                    <GainCell gain_table={gain_table} index={3} role={role} />
+                  </tr>
+                </tbody>
+              </table>
+            : <table>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td style={{textAlign: "center"}}>自白する</td>
+                    <td style={{textAlign: "center"}}>自白しない</td>
+                  </tr>
+                  <tr>
+                    <td style={{width: '20%'}}>自白する</td>
+                    <GainCell gain_table={gain_table} index={0} role={role} />
+                    <GainCell gain_table={gain_table} index={2} role={role} />
+                  </tr>
+                  <tr>
+                    <td>自白しない</td>
+                    <GainCell gain_table={gain_table} index={1} role={role} />
+                    <GainCell gain_table={gain_table} index={3} role={role} />
+                  </tr>
+                </tbody>
+              </table>
+          }
         </td>
       </tr>
     </tbody>
@@ -59,12 +82,23 @@ const GainTable = ({gain_table, role}) => (
 class Experiment extends Component {
   constructor(props, context) {
     super(props, context)
-    this.state = {}
+    this.state = {
+      isOpenSendMessage: false,
+    }
   }
 
   submitAnswer(answer) {
     const { dispatch } = this.props
     dispatch(submitAnswer(answer))
+    this.setState({
+      isOpenSendMessage: true,
+    })
+  }
+
+  onRequestClose() {
+    this.setState({
+      isOpenSendMessage: false,
+    })
   }
 
   render() {
@@ -109,6 +143,12 @@ class Experiment extends Component {
           </div>
           : <p>ペアが見つかりませんでした</p>
         }
+        <Snackbar
+          open={this.state.isOpenSendMessage}
+          message="送信しました"
+          autoHideDuration={3000}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     )
   }

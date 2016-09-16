@@ -14,6 +14,7 @@ defmodule PrisonersDilemma do
        page: "waiting",
        participants: %{},
        pairs: %{},
+       active_pair: 0,
        finish_description: 0,
        message: %{
          description: [
@@ -37,6 +38,7 @@ defmodule PrisonersDilemma do
       is_finish_description: false,
       role: "visitor",
       answer: nil,
+      round_point: 0,
       point: 0,
       ans_yes: 0,
       pair_id: nil,
@@ -95,25 +97,25 @@ defmodule PrisonersDilemma do
     end
     acc = {participants, %{}}
     {participants, groups} = Enum.reduce(groups, acc, reducer)
-
-    %{data | participants: participants, pairs: groups}
+    
+    %{data | participants: participants, pairs: groups, active_pair: Map.size(groups)}
   end
 
   def judge(data, user1, user2) do
     [[a, b], [c, d], [e, f], [g, h]] = data.config["gain_table"]
     case {user1.answer, user2.answer} do
       {"yes", "yes"} ->
-        user1 = %{ user1 | point: user1.point+a }
-        user2 = %{ user2 | point: user2.point+b }
+        user1 = %{ user1 | point: user1.point+a, round_point: a}
+        user2 = %{ user2 | point: user2.point+b, round_point: b}
       {"yes", "no"} ->
-        user1 = %{ user1 | point: user1.point+c }
-        user2 = %{ user2 | point: user2.point+d }
+        user1 = %{ user1 | point: user1.point+c, round_point: c}
+        user2 = %{ user2 | point: user2.point+d, round_point: d}
       {"no", "yes"} ->
-        user1 = %{ user1 | point: user1.point+e }
-        user2 = %{ user2 | point: user2.point+f }
+        user1 = %{ user1 | point: user1.point+e, round_point: e}
+        user2 = %{ user2 | point: user2.point+f, round_point: f}
       {"no", "no"} ->
-        user1 = %{ user1 | point: user1.point+g }
-        user2 = %{ user2 | point: user2.point+h }
+        user1 = %{ user1 | point: user1.point+g, round_point: g}
+        user2 = %{ user2 | point: user2.point+h, round_point: h}
     end
     {user1, user2}
   end
@@ -151,6 +153,12 @@ defmodule PrisonersDilemma do
     data = %{data | page: params}
     unless data.page == "result" do
       data = Map.put(data, :joined, Map.size(data.participants))
+      pairs = Enum.map(data.pairs, fn { id, pair } ->
+        {id, %{ pair |
+          current_round: 1,
+          finished: false,
+          logs: [],
+        }} end) |> Enum.into(%{})
       participants = Enum.map(data.participants, fn {id, participant} ->
         {id, %{participant |
           answer: nil,
@@ -159,7 +167,7 @@ defmodule PrisonersDilemma do
           point: 0,
           ans_yes: 0,
         }} end) |> Enum.into(%{})
-      data = %{data | participants: participants}
+      data = %{data | participants: participants, pairs: pairs, active_pair: Map.size(pairs)}
     end
     if data.page == "description" do
       data = %{data | finish_description: 0}
@@ -174,6 +182,7 @@ defmodule PrisonersDilemma do
       joined: data.joined,
       finish_description: data.finish_description,
       pairs: data.pairs,
+      active_pair: data.active_pair,
     }
     participant_action = Enum.map(data.participants, fn {id, _} ->
       {id, %{action: %{
@@ -267,6 +276,7 @@ defmodule PrisonersDilemma do
       participant = %{ participant | ans_yes: participant.ans_yes+1 }
     end
     data = put_in(data.participants[id], participant)
+
     if participant.answer != nil and buddy.answer != nil do
       Logger.debug "answerd each participants"
 
@@ -282,23 +292,27 @@ defmodule PrisonersDilemma do
         round: pair.current_round,
         point1: data.participants[pair.user1].point,
         point2: data.participants[pair.user2].point,
+        round_point1: data.participants[pair.user1].round_point,
+        round_point2: data.participants[pair.user2].round_point,
         answer1: data.participants[pair.user1].answer,
         answer2: data.participants[pair.user2].answer,
       }
       Logger.debug data.config["max_round"]
+      Logger.debug pair.current_round
+      if pair.current_round >= data.config["max_round"] do
+        data = %{ data | active_pair: data.active_pair-1}
+        participant = %{ participant | finished: true }
+        buddy = %{ buddy | finished: true }
+        pair = %{ pair | finished: true }
+      end
       pair = %{ pair |
         logs: [log] ++ pair.logs,
-        current_round: unless pair.current_round > data.config["max_round"] do
+        current_round: if pair.current_round < data.config["max_round"] do
           pair.current_round+1
         else
           pair.current_round
         end,
       }
-      if pair.current_round >= data.config["max_round"] do
-        participant = %{ participant | finished: true }
-        buddy = %{ buddy | finished: true }
-        pair = %{ pair | finished: true }
-      end
       participant = %{ participant | answer: nil }
       buddy = %{ buddy | answer: nil }
       data = put_in(data.pairs[participant.pair_id], pair)
@@ -310,6 +324,7 @@ defmodule PrisonersDilemma do
       type: "SUBMIT_ANSWER",
       pairs: data.pairs,
       users: data.participants,
+      active_pair: data.active_pair,
     }
 
     participant_action = %{
