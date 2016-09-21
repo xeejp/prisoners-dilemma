@@ -7,7 +7,6 @@ import ActionSettings from 'material-ui/svg-icons/action/settings'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 import {Tabs, Tab} from 'material-ui/Tabs'
-import {Card} from 'material-ui/Card'
 import SwipeableViews from 'react-swipeable-views'
 import Snackbar from 'material-ui/Snackbar'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';

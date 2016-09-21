@@ -102,8 +102,8 @@ class Description extends Component {
               message.description.map((description, index) => (
                 <div key={index}>
                   <CardHeader
-                    title="説明"
-                    subtitle={(index+1) + "/" + (message.description.length+2)}
+                    title="囚人のジレンマ"
+                    subtitle={"ルールの説明 " + (index+1) + "/" + (message.description.length+2)}
                   />
                   <CardText expandable={false}>
                     {description.text.split('\n').map( line => <p key={line}>{line}</p>)}
@@ -113,8 +113,8 @@ class Description extends Component {
             }
             <div>
               <CardHeader
-                title="説明"
-                subtitle={(message.description.length+1)+"/"+(message.description.length+2)}
+                title="囚人のジレンマ"
+                subtitle={"ルールの説明 " + (message.description.length+1)+"/"+(message.description.length+2)}
               />
               <CardText expandable={false}>
                 <GainTable gain_table={config.gain_table} role={own_data.role} />
@@ -122,8 +122,8 @@ class Description extends Component {
             </div>
             <div>
               <CardHeader
-                title="説明"
-                subtitle={(message.description.length+2)+"/"+(message.description.length+2)}
+                title="囚人のジレンマ"
+                subtitle={"ルールの説明 " + (message.description.length+2)+"/"+(message.description.length+2)}
               />
               <CardText expandable={false}>
                 <p>実験が開始されるまでお待ちください</p>
