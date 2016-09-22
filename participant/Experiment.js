@@ -108,11 +108,11 @@ class Experiment extends Component {
         {
           own_data.role != "visitor"
           ? <div>
-            {
+            <Card><CardText>{
               !own_data.finished
-              ? <div>
+              ? <div style={{overflow: 'hidden'}}>
                 <p>下のような利得表になる時、次の選択肢から選んでください</p>
-                <Card>
+                <Card style={{marginLeft: "2%", marginRight: "2%"}}>
                   <CardHeader
                     title="利得表"
                   />
@@ -124,20 +124,20 @@ class Experiment extends Component {
                 <RaisedButton 
                   onClick={this.submitAnswer.bind(this, "yes")}
                   disabled={own_data.answer != null}
-                  style={{float: "left", width: '40%', position: 'relative', margin: '%5'}}
+                  style={{float: "left", width: '40%', position: 'relative', margin: '5%'}}
                 >
                   自白する
                 </RaisedButton>
                 <RaisedButton 
                   onClick={this.submitAnswer.bind(this, "no")}
                   disabled={own_data.answer != null}
-                  style={{float: "right", width: '40%', position: 'relative', margin: '%5'}}
+                  style={{float: "right", width: '40%', position: 'relative', margin: '5%'}}
                 >
                   自白しない
                 </RaisedButton>
               </div>
               : <p>実験終了までお待ちください</p>
-            }
+            }</CardText></Card>
             <br />
             <Log />
           </div>

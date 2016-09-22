@@ -6,7 +6,6 @@ import Divider from 'material-ui/Divider'
 import { fetchContents } from './actions'
 
 import PageStepper from './PageStepper'
-import HostMessage from './HostMessage'
 import Users from './Users'
 import Pairs from './Pairs'
 import GainTableCard from './GainTableCard'
@@ -38,7 +37,6 @@ class App extends Component {
             marginBottom: '5%',
           }}
         />
-        <HostMessage />
         <Users />
         <Pairs />
         <GainTableCard />
