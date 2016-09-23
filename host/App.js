@@ -11,6 +11,7 @@ import Pairs from './Pairs'
 import GainTableCard from './GainTableCard'
 import MessageEditor from './MessageEditor'
 import ConfigEditor from './ConfigEditor'
+import MatchingButton from './MatchingButton'
 
 
 const mapStateToProps = ({}) => ({
@@ -42,6 +43,7 @@ class App extends Component {
         <GainTableCard />
         <MessageEditor />
         <ConfigEditor />
+        <MatchingButton />
       </div>
     )
   }
