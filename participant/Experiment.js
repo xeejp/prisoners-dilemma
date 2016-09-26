@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import Snackbar from 'material-ui/Snackbar'
 
+import InputSnum from './InputSnum'
 import Log from './Log'
 
 import { submitAnswer } from './actions'
@@ -104,6 +105,9 @@ class Experiment extends Component {
   render() {
     const { own_data, config } = this.props
     return (
+      (config.askSnum && own_data.snum == "")?
+      <Card><CardText><div style={{textAlign: "center"}}><InputSnum /></div></CardText></Card>
+      :
       <div>
         {
           own_data.role != "visitor"
@@ -150,7 +154,7 @@ class Experiment extends Component {
           onRequestClose={this.handleRequestClose}
         />
       </div>
-    )
+      )
   }
 }
 

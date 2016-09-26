@@ -27,7 +27,8 @@ defmodule PrisonersDilemma do
        },
        config: %{
          "max_round" => 1,
-         "gain_table" => [[-8, -8], [0, -15], [-15, 0], [-1, -1]]
+         "gain_table" => [[-8, -8], [0, -15], [-15, 0], [-1, -1]],
+         "askSnum" => false,
        },
        joined: 0,
      }}}
@@ -35,6 +36,7 @@ defmodule PrisonersDilemma do
 
   def new_participant() do
     %{
+      snum: "",
       is_finish_description: false,
       role: "visitor",
       answer: nil,
@@ -370,6 +372,20 @@ defmodule PrisonersDilemma do
       users: data.participants,
     }
     {:ok, %{"data" => data, "host" => %{action: action}}}
+  end
+
+  def handle_received(data, %{"action" => "update snum", "params" => params}, id) do
+    data = data |> put_in([:participants, id, :snum], params)
+    haction = %{
+      type: "UPDATE_SNUM",
+      id: id,
+      own_data: data.participants[id],
+    }
+    paction = %{
+      type: "UPDATE_SNUM",
+      own_data: data.participants[id],
+    }
+    {:ok, %{"data" => data, "host" => %{action: haction}, "participant" => %{id => %{action: paction}}}}
   end
 
   def handle_received(data, _action, _id) do

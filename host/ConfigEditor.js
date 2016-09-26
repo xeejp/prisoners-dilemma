@@ -7,6 +7,7 @@ import ActionSettings from 'material-ui/svg-icons/action/settings'
 import Dialog from 'material-ui/Dialog'
 import TextField from 'material-ui/TextField'
 import {Tabs, Tab} from 'material-ui/Tabs'
+import Toggle from 'material-ui/Toggle'
 import SwipeableViews from 'react-swipeable-views'
 import Snackbar from 'material-ui/Snackbar'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
@@ -143,6 +144,12 @@ class ConfigEditor extends Component {
     })
   }
 
+    handleChangeAskStudentId(e, value) {
+      console.log(value)
+      this.setState({ config: Object.assign({}, this.state.config, { askSnum: value }) })
+  }
+
+
   submit() {
     this.setState({ 
       isOpenDialog: false,
@@ -199,6 +206,13 @@ class ConfigEditor extends Component {
           open={this.state.isOpenDialog}
           autoScrollBodyContent={true}
         >
+          <p>学籍番号入力</p>
+          <Toggle
+            label={"学籍番号入力" + (config.askSnum ? "を行う" : "行わない")}
+            toggled={config.askSnum}
+            onToggle={this.handleChangeAskStudentId.bind(this)}
+          />
+
           <p>ラウンド数</p>
           <TextField
             hintText={"ラウンド数"}
@@ -230,7 +244,6 @@ class ConfigEditor extends Component {
           autoHideDuration={2000}
           onRequestClose={this.handleRequestClose.bind(this)}
         />
-          
       </span>
     )
   }

@@ -80,6 +80,13 @@ function reducer(state = initialState, action) {
         active_pair: action.active_pair,
       })
 
+      case "UPDATE_SNUM":
+        return Object.assign({}, state, {
+          users: Object.assign({}, state.users, {
+            [action.id]: action.own_data
+          })
+        })
+
     default:
       return state
   }

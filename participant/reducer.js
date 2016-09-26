@@ -12,6 +12,7 @@ function reducer(state = {}, action) {
         own_data: action.own_data,
         config: action.config,
         users: action.users,
+        snum: action.snum
       })
 
     case "ADD_USER":
@@ -46,6 +47,11 @@ function reducer(state = {}, action) {
       return Object.assign({}, state, {
         config: action.config,
       })
+
+      case "UPDATE_SNUM":
+        return Object.assign({}, state, {
+          own_data: action.own_data
+        })
 
     default:
       return state

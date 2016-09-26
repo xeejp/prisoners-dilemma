@@ -53,7 +53,7 @@ class Users extends Component {
               {
                 Object.keys(users).map(id => (
                   <tr key={id}>
-                    <td>{id}</td>
+                    <td>{(users[id].snum != "")? users[id].snum : id}</td>
                     <td>{users[id].role}</td>
                     <td>{users[id].point}</td>
                     <td>{users[id].pair_id}</td>
