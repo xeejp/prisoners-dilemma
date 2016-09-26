@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import Highcharts from 'react-highcharts'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 
-const mapStateToProps = ({own_data, config, users}) => ({
+const mapStateToProps = ({own_data, logs, users}) => ({
   own_data,
-  config,
+  logs,
   users,
 })
 
@@ -25,10 +25,18 @@ class App extends Component {
   }
 
   render() {
-    const {own_data, config, users} = this.props
-
+    const {own_data, logs, users} = this.props
     let buddy_data = users[own_data.buddy_id]
+    let answer = ["answer" + ((0 + (own_data.role != "User1")) + 1), "answer" + ((0 + (buddy_data.role != "User1")) + 1)]
+    
+    let rate = [[], []]
 
+    for(var i = 0; i < 2; i++){
+      for(var j = logs.length - 1; j >= 0; j--){
+        var count = (logs.length - 1) - j
+        rate[i][count] = 0 + (logs[count][answer[i]] == "yes") + ((count != 0)? rate[i][count - 1] : 0)
+      }
+    }
 
     return (
       <Card
@@ -60,9 +68,11 @@ class App extends Component {
               title: {
                 text: '自白を選んだ率'
               },
+              min:     0,
+              max: 100,
             },
             tooltip: {
-              valueSuffix: '%'
+              pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y: .2f}%</b><br />'
             },
             legend: {
               layout: 'vertical',
@@ -72,11 +82,11 @@ class App extends Component {
             },
             series: [{
               name: '自分',
-              data: [7.0, 3.5,7.0, 3.5,7.0, 3.5,7.0, 3.5],
+              data: rate[0].map((r, i) => r * 100 / (i + 1)),
               pointStart: 1,
             }, {
               name: '相手',
-              data: [3.5, 7,3.5, 7,3.5, 7,3.5, 7,],
+              data: rate[1].map((r, i) => r * 100 / (i + 1)),
               pointStart: 1,
             }]
           }} 

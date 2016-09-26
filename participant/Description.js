@@ -91,6 +91,29 @@ class Description extends Component {
       const { dispatch } = this.props
       dispatch(finishDescription())
     }
+    let descList = [
+      <div>
+        <CardHeader
+          title="囚人のジレンマ"
+          subtitle={"ルールの説明 " + (message.description.length+1)+"/"+(message.description.length+2)}
+        />
+        <CardText expandable={false}>
+          <GainTable gain_table={config.gain_table} role={own_data.role} />
+        </CardText>
+      </div>,
+      <div>
+        <CardHeader
+          title="囚人のジレンマ"
+          subtitle={"ルールの説明 " + (message.description.length+2)+"/"+(message.description.length+2)}
+        />
+        <CardText expandable={false}>
+          <p>実験が開始されるまでお待ちください</p>
+          <div style={{textAlign: "center"}}>
+            <CircularProgress />
+          </div>
+        </CardText>
+      </div>
+    ]
     return (
       <div>
         <Card style={{marginBottom: "5%"}}>
@@ -109,29 +132,8 @@ class Description extends Component {
                     {description.text.split('\n').map( line => <p key={line}>{line}</p>)}
                   </CardText>
                 </div>
-              ))
+              )).concat(descList)
             }
-            <div>
-              <CardHeader
-                title="囚人のジレンマ"
-                subtitle={"ルールの説明 " + (message.description.length+1)+"/"+(message.description.length+2)}
-              />
-              <CardText expandable={false}>
-                <GainTable gain_table={config.gain_table} role={own_data.role} />
-              </CardText>
-            </div>
-            <div>
-              <CardHeader
-                title="囚人のジレンマ"
-                subtitle={"ルールの説明 " + (message.description.length+2)+"/"+(message.description.length+2)}
-              />
-              <CardText expandable={false}>
-                <p>実験が開始されるまでお待ちください</p>
-                <div style={{textAlign: "center"}}>
-                  <CircularProgress />
-                </div>
-              </CardText>
-            </div>
           </SwipeableViews>
         </Card>
         <RaisedButton 
