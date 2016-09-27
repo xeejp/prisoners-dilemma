@@ -19,7 +19,7 @@ const mapStateToProps = ({ config, message, own_data }) => ({
 const GainCell = ({ gain_table, index, role }) => (
   <td style={{borderStyle: "solid", width: '40%', textAlign: "center"}}>
     {
-      role != "User2"
+      role != "彼女"
       ? gain_table[index][0] + ", " + gain_table[index][1]
       : gain_table[index][1] + ", " + gain_table[index][0]
     }
@@ -34,21 +34,21 @@ const GainTable = ({gain_table, role}) => (
         <td>自分</td>
         <td style={{width: '100%'}}>
           {
-            role=="User1"
+            role=="彼"
             ? <table>
                 <tbody>
                   <tr>
                     <td></td>
-                    <td style={{textAlign: "center"}}>自白する</td>
-                    <td style={{textAlign: "center"}}>自白しない</td>
+                    <td style={{textAlign: "center"}}>待つ</td>
+                    <td style={{textAlign: "center"}}>出掛ける</td>
                   </tr>
                   <tr>
-                    <td style={{width: '20%'}}>自白する</td>
+                    <td style={{width: '20%'}}>待つ</td>
                     <GainCell gain_table={gain_table} index={0} role={role} />
                     <GainCell gain_table={gain_table} index={1} role={role} />
                   </tr>
                   <tr>
-                    <td>自白しない</td>
+                    <td>出掛ける</td>
                     <GainCell gain_table={gain_table} index={2} role={role} />
                     <GainCell gain_table={gain_table} index={3} role={role} />
                   </tr>
@@ -58,16 +58,16 @@ const GainTable = ({gain_table, role}) => (
                 <tbody>
                   <tr>
                     <td></td>
-                    <td style={{textAlign: "center"}}>自白する</td>
-                    <td style={{textAlign: "center"}}>自白しない</td>
+                    <td style={{textAlign: "center"}}>待つ</td>
+                    <td style={{textAlign: "center"}}>出掛ける</td>
                   </tr>
                   <tr>
-                    <td style={{width: '20%'}}>自白する</td>
+                    <td style={{width: '20%'}}>待つ</td>
                     <GainCell gain_table={gain_table} index={0} role={role} />
                     <GainCell gain_table={gain_table} index={2} role={role} />
                   </tr>
                   <tr>
-                    <td>自白しない</td>
+                    <td>出掛ける</td>
                     <GainCell gain_table={gain_table} index={1} role={role} />
                     <GainCell gain_table={gain_table} index={3} role={role} />
                   </tr>
@@ -130,14 +130,14 @@ class Experiment extends Component {
                   disabled={own_data.answer != null}
                   style={{float: "left", width: '40%', position: 'relative', margin: '5%'}}
                 >
-                  自白する
+                  待つ
                 </RaisedButton>
                 <RaisedButton 
                   onClick={this.submitAnswer.bind(this, "no")}
                   disabled={own_data.answer != null}
                   style={{float: "right", width: '40%', position: 'relative', margin: '5%'}}
                 >
-                  自白しない
+                  出掛ける
                 </RaisedButton>
               </div>
               : <p>実験終了までお待ちください</p>

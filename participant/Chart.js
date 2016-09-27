@@ -27,7 +27,7 @@ class App extends Component {
   render() {
     const {own_data, logs, users} = this.props
     let buddy_data = users[own_data.buddy_id]
-    let answer = ["answer" + ((0 + (own_data.role != "User1")) + 1), "answer" + ((0 + (buddy_data.role != "User1")) + 1)]
+    let answer = ["answer" + ((0 + (own_data.role != "彼")) + 1), "answer" + ((0 + (buddy_data.role != "彼")) + 1)]
     
     let rate = [[], []]
 
@@ -66,7 +66,7 @@ class App extends Component {
             },
             yAxis: {
               title: {
-                text: '自白を選んだ率'
+                text: '待つを選んだ率'
               },
               min:     0,
               max: 100,

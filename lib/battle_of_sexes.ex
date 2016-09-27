@@ -18,16 +18,16 @@ defmodule BattleOfSexes do
        finish_description: 0,
        message: %{
          description: [
-           %{id: 0, text: "あなたは2人で旅行をしていたところ、浮浪罪で逮捕された。\nあなたたちは共犯をして強盗を働いたのではないと疑われているが、有罪にするには証拠が不十分である。"},
-           %{id: 1, text: "地方検事は隔離された独房で個別に彼らを審問し、各々に対して次のような提示をした。"},
-           %{id: 2, text: "「もし君が自白して君の友人が自白しなかったら、君は釈放されるが友人は厳しく処罰されるだろう。\nもし2人とも自白すれば判決は控えめになるだろう。\nもし誰も自白しなければ、軽い浮浪罪で処罰されるだろう。」"},
-           %{id: 3, text: "ここで約束された懲役は次の表に月単位で示される。\nもしも合理的ならば彼らはどのような行動を選ぶだろうか。"},
+           %{id: 0, text: "大きな地震があって、通信網が途切れてしまったが、彼と彼女とは至急に会わなければならない用事ができた。"},
+           %{id: 1, text: "2人のとることができる行動は、「相手が来るのをその場で待つ」、「こちらから相手のいるところに出掛ける」という2つの方法しかない。"},
+           %{id: 2, text: "もし2人とも出かけたとすると、苦労ばかりで会えないから、最悪の状態である。\n2人とも、その場で待っていたのでは、やはり会うことはできない。"},
+           %{id: 3, text: "2人は待つべきか、出掛けるべきか、どちらだろうか。"},
          ],
          experiment: "",
        },
        config: %{
          "max_round" => 1,
-         "gain_table" => [[-8, -8], [0, -15], [-15, 0], [-1, -1]],
+         "gain_table" => [[0, 0], [10, 6], [6, 10], [-6, -6]],
          "askSnum" => false,
        },
        joined: 0,
@@ -92,8 +92,8 @@ defmodule BattleOfSexes do
     reducer = fn {group, ids}, {participants, pairs} ->
       [id1, id2] = ids
       participants = participants 
-                      |>Map.update!(id1, &updater.(&1, group, id2, "User1"))
-                      |>Map.update!(id2, &updater.(&1, group, id1, "User2"))
+                      |>Map.update!(id1, &updater.(&1, group, id2, "彼"))
+                      |>Map.update!(id2, &updater.(&1, group, id1, "彼女"))
       pairs = Map.put(pairs, group, new_pair(id1, id2))
       {participants, pairs}
     end
@@ -278,7 +278,7 @@ defmodule BattleOfSexes do
   def handle_received(data, %{"action" => "submit answer", "params" => params}, id) do
     participant = data.participants[id]
     pair = data.pairs[participant.pair_id]
-    buddy_id = if participant.role == "User1" do
+    buddy_id = if participant.role == "彼" do
       pair.user2
     else
       pair.user1
@@ -294,7 +294,7 @@ defmodule BattleOfSexes do
     if participant.answer != nil and buddy.answer != nil do
       Logger.debug "answerd each participants"
 
-      if participant.role == "User1" do
+      if participant.role == "彼" do
         {participant, buddy} = judge(data, participant, buddy)
       else
         {buddy, participant} = judge(data, buddy, participant)
