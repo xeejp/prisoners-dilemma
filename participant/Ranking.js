@@ -73,8 +73,8 @@ class Log extends Component {
               <tr>
                 <th>順位</th>
                 <th>ポイント</th>
-                <th>"自白する"を選んだ割合(自分)</th>
-                <th>"自白する"を選んだ割合(相手)</th>
+                <th>"家事をする"を選んだ割合(自分)</th>
+                <th>"家事をする"を選んだ割合(相手)</th>
               </tr>
             </thead>
             <thead>

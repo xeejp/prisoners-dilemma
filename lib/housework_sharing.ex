@@ -1,4 +1,4 @@
-defmodule PrisonersDilemma do
+defmodule HouseworkSharing do
   use XeeThemeScript
   require Logger
 
@@ -18,16 +18,16 @@ defmodule PrisonersDilemma do
        finish_description: 0,
        message: %{
          description: [
-           %{id: 0, text: "あなたは2人で旅行をしていたところ、浮浪罪で逮捕された。\nあなたたちは共犯をして強盗を働いたのではないと疑われているが、有罪にするには証拠が不十分である。"},
-           %{id: 1, text: "地方検事は隔離された独房で個別に彼らを審問し、各々に対して次のような提示をした。"},
-           %{id: 2, text: "「もし君が自白して君の友人が自白しなかったら、君は釈放されるが友人は厳しく処罰されるだろう。\nもし2人とも自白すれば判決は控えめになるだろう。\nもし誰も自白しなければ、軽い浮浪罪で処罰されるだろう。」"},
-           %{id: 3, text: "ここで約束された懲役は次の表に月単位で示される。\nもしも合理的ならば彼らはどのような行動を選ぶだろうか。"},
+           %{id: 0, text: "共働きの夫婦の家事の分担を考える。"},
+           %{id: 1, text: "2人とも家事をすれば、家はきれいになるし無駄な費用もかからない。"},
+           %{id: 2, text: "1人が家事をし、1人が家事をしなければ、家はきれいになるし費用もかからない。しかし、家事をする方は非常に疲れる。\nさらにこれから先も1人でやり続ける状態が続いてしまう。"},
+           %{id: 3, text: "2人とも家事をしなければ、汚れた家に住むことになり、食事はいつも外食で無駄な費用もかかってしまう。"},
          ],
          experiment: "",
        },
        config: %{
          "max_round" => 1,
-         "gain_table" => [[-8, -8], [0, -15], [-15, 0], [-1, -1]],
+         "gain_table" => [[2, 2], [1, 4], [4, 1], [0, 0]],
          "askSnum" => false,
        },
        joined: 0,
@@ -92,8 +92,8 @@ defmodule PrisonersDilemma do
     reducer = fn {group, ids}, {participants, pairs} ->
       [id1, id2] = ids
       participants = participants 
-                      |>Map.update!(id1, &updater.(&1, group, id2, "User1"))
-                      |>Map.update!(id2, &updater.(&1, group, id1, "User2"))
+                      |>Map.update!(id1, &updater.(&1, group, id2, "夫"))
+                      |>Map.update!(id2, &updater.(&1, group, id1, "妻"))
       pairs = Map.put(pairs, group, new_pair(id1, id2))
       {participants, pairs}
     end
@@ -278,7 +278,7 @@ defmodule PrisonersDilemma do
   def handle_received(data, %{"action" => "submit answer", "params" => params}, id) do
     participant = data.participants[id]
     pair = data.pairs[participant.pair_id]
-    buddy_id = if participant.role == "User1" do
+    buddy_id = if participant.role == "夫" do
       pair.user2
     else
       pair.user1
@@ -294,7 +294,7 @@ defmodule PrisonersDilemma do
     if participant.answer != nil and buddy.answer != nil do
       Logger.debug "answerd each participants"
 
-      if participant.role == "User1" do
+      if participant.role == "夫" do
         {participant, buddy} = judge(data, participant, buddy)
       else
         {buddy, participant} = judge(data, buddy, participant)

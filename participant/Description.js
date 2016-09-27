@@ -17,7 +17,7 @@ const mapStateToProps = ({message, config, own_data}) => ({
 const GainCell = ({ gain_table, index, role }) => (
   <td style={{borderStyle: "solid", width: '40%', textAlign: "center"}}>
     {
-      role != "User2"
+      role != "妻"
       ? gain_table[index][0] + ", " + gain_table[index][1]
       : gain_table[index][1] + ", " + gain_table[index][0]
     }
@@ -35,16 +35,16 @@ const GainTable = ({gain_table, role}) => (
             <tbody>
               <tr>
                 <td></td>
-                <td style={{textAlign: "center"}}>自白する</td>
-                <td style={{textAlign: "center"}}>自白しない</td>
+                <td style={{textAlign: "center"}}>家事をする</td>
+                <td style={{textAlign: "center"}}>家事をしない</td>
               </tr>
               <tr>
-                <td style={{width: '20%'}}>自白する</td>
+                <td style={{width: '20%'}}>家事をする</td>
                 <GainCell gain_table={gain_table} index={0} role={role} />
                 <GainCell gain_table={gain_table} index={1} role={role} />
               </tr>
               <tr>
-                <td>自白しない</td>
+                <td>家事をしない</td>
                 <GainCell gain_table={gain_table} index={2} role={role} />
                 <GainCell gain_table={gain_table} index={3} role={role} />
               </tr>
@@ -94,7 +94,7 @@ class Description extends Component {
     let descList = [
       <div>
         <CardHeader
-          title="囚人のジレンマ"
+          title="家事分担"
           subtitle={"ルールの説明 " + (message.description.length+1)+"/"+(message.description.length+2)}
         />
         <CardText expandable={false}>
@@ -103,7 +103,7 @@ class Description extends Component {
       </div>,
       <div>
         <CardHeader
-          title="囚人のジレンマ"
+          title="家事分担"
           subtitle={"ルールの説明 " + (message.description.length+2)+"/"+(message.description.length+2)}
         />
         <CardText expandable={false}>
@@ -125,7 +125,7 @@ class Description extends Component {
               message.description.map((description, index) => (
                 <div key={index}>
                   <CardHeader
-                    title="囚人のジレンマ"
+                    title="家事分担"
                     subtitle={"ルールの説明 " + (index+1) + "/" + (message.description.length+2)}
                   />
                   <CardText expandable={false}>

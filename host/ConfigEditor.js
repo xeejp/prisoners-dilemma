@@ -35,24 +35,24 @@ const GainCell = ({ parent, gain_table, index, role}) => (
 const GainTable = ({ parent, gain_table, role }) => (
   <table>
     <tbody>
-      <tr><td></td><td style={{textAlign: "center"}}>User2</td></tr>
+      <tr><td></td><td style={{textAlign: "center"}}>妻</td></tr>
       <tr>
-        <td>User1</td>
+        <td>夫</td>
         <td>
           <table>
             <tbody>
               <tr>
                 <td></td>
-                <td style={{textAlign: "center"}}>自白する</td>
-                <td style={{textAlign: "center"}}>自白しない</td>
+                <td style={{textAlign: "center"}}>家事をする</td>
+                <td style={{textAlign: "center"}}>家事をしない</td>
               </tr>
               <tr>
-                <td>自白する</td>
+                <td>家事をする</td>
                 <GainCell parent={parent} gain_table={gain_table} index={0} role={role} />
                 <GainCell parent={parent} gain_table={gain_table} index={1} role={role} />
               </tr>
               <tr>
-                <td>自白しない</td>
+                <td>家事をしない</td>
                 <GainCell parent={parent} gain_table={gain_table} index={2} role={role} />
                 <GainCell parent={parent} gain_table={gain_table} index={3} role={role} />
               </tr>
@@ -77,7 +77,7 @@ class ConfigEditor extends Component {
       config: config,
       defaultConfig: {
         max_round: 1,
-        gain_table: [[-8, -8], [0, -15], [-15, 0], [-1, -1]]
+        gain_table: [[2, 2], [1, 4], [4, 1], [0, 0]]
       },
 
     }
@@ -226,8 +226,8 @@ class ConfigEditor extends Component {
             onChange={this.handleSlideIndex.bind(this)}
             value={this.state.slideIndex}
           >
-            <Tab label="USER1" value={0} />
-            <Tab label="USER2" value={1} />
+            <Tab label="夫" value={0} />
+            <Tab label="妻" value={1} />
           </Tabs>
           <SwipeableViews
             index={this.state.slideIndex}
