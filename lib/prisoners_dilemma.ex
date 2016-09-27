@@ -1,4 +1,4 @@
-defmodule PrisonersDilemma do
+defmodule CoinOrientation do
   use XeeThemeScript
   require Logger
 

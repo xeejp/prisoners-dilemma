@@ -1,6 +1,6 @@
-defmodule PrisonersDilemmaTest do
+defmodule CoinOrientationTest do
   use ExUnit.Case
-  doctest PrisonersDilemma
+  doctest CoinOrientation
 
   test "the truth" do
     assert 1 + 1 == 2

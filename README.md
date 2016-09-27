@@ -1,1 +1,1 @@
-# prisoners-dilemma
+# coin-orientation
