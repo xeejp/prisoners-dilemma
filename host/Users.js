@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import reactCSS from 'reactcss'
 
 import { Card, CardHeader, CardText } from 'material-ui/Card'
+
+import { openParticipantPage } from './actions'
 
 
 const mapStateToProps = ({page, users, joined, finish_description}) => ({
@@ -12,6 +15,13 @@ const mapStateToProps = ({page, users, joined, finish_description}) => ({
   joined,
   finish_description,
 })
+
+const mapDispatchToProps = (dispatch) => {
+  const open = bindActionCreators(openParticipantPage, dispatch)
+  return {
+    openParticipantPage: (id) => () => open(id)
+  }
+}
 
 function createHeaderInfoStr(page, finish_description) {
   switch (page) {
@@ -24,7 +34,7 @@ function createHeaderInfoStr(page, finish_description) {
 
 class Users extends Component {
   render() {
-    const {users, page, joined, finish_description} = this.props
+    const {users, page, joined, finish_description, openParticipantPage} = this.props
 
     return (
       <Card 
@@ -53,7 +63,7 @@ class Users extends Component {
               {
                 Object.keys(users).map(id => (
                   <tr key={id}>
-                    <td>{(users[id].snum != "")? users[id].snum : id}</td>
+                    <td><a onClick={openParticipantPage(id)}>{(users[id].snum != "")? users[id].snum : id}</a></td>
                     <td>{users[id].role}</td>
                     <td>{users[id].point}</td>
                     <td>{users[id].pair_id}</td>
@@ -72,4 +82,4 @@ class Users extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Users)
+export default connect(mapStateToProps, mapDispatchToProps)(Users)
