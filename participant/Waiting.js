@@ -18,7 +18,7 @@ class Waiting extends Component {
     const { joined } = this.props
     return (
       <Card>
-        <CardTitle title="囚人のジレンマ" subtitle="待機画面" />
+        <CardTitle title="合理的な豚" subtitle="待機画面" />
           <CardText>
             <p>参加者の登録を待っています。</p>
             <p>この画面のまましばらくお待ち下さい。</p>

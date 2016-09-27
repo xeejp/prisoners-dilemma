@@ -25,16 +25,16 @@ const GainTable = ({gain_table}) => (
             <tbody>
               <tr>
                 <td></td>
-                <td style={{textAlign: "center"}}>自白する</td>
-                <td style={{textAlign: "center"}}>自白しない</td>
+                <td style={{textAlign: "center"}}>押す</td>
+                <td style={{textAlign: "center"}}>押さない</td>
               </tr>
               <tr>
-                <td style={{width: '20%'}}>自白する</td>
+                <td style={{width: '20%'}}>押す</td>
                 <GainCell gain_table={gain_table} index={0} />
                 <GainCell gain_table={gain_table} index={1} />
               </tr>
               <tr>
-                <td>自白しない</td>
+                <td>押さない</td>
                 <GainCell gain_table={gain_table} index={2} />
                 <GainCell gain_table={gain_table} index={3} />
               </tr>

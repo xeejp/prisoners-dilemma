@@ -18,16 +18,15 @@ defmodule RationalPig do
        finish_description: 0,
        message: %{
          description: [
-           %{id: 0, text: "あなたは2人で旅行をしていたところ、浮浪罪で逮捕された。\nあなたたちは共犯をして強盗を働いたのではないと疑われているが、有罪にするには証拠が不十分である。"},
-           %{id: 1, text: "地方検事は隔離された独房で個別に彼らを審問し、各々に対して次のような提示をした。"},
-           %{id: 2, text: "「もし君が自白して君の友人が自白しなかったら、君は釈放されるが友人は厳しく処罰されるだろう。\nもし2人とも自白すれば判決は控えめになるだろう。\nもし誰も自白しなければ、軽い浮浪罪で処罰されるだろう。」"},
-           %{id: 3, text: "ここで約束された懲役は次の表に月単位で示される。\nもしも合理的ならば彼らはどのような行動を選ぶだろうか。"},
+           %{id: 0, text: "大小2匹の豚が檻に入れられている。"},
+           %{id: 1, text: "檻の片隅にあるレバーを押すと檻の反対側の隅に餌が投与される。\nレバーを押した豚は反対側の隅まで走らなければならず、やっとたどり着いた時には、もう一匹の豚がほとんどの餌を食べてしまってわずかにしか残っていない。\n2匹の豚が同時に餌にたどり着いた場合、大きい方の豚は小さい方の豚を完全に餌から追い払うことができる。"},
+           %{id: 2, text: "豚がゲーム理論家のように推論できると仮定するならば、どちらの豚がレバーを押しに行くだろうか。"},
          ],
          experiment: "",
        },
        config: %{
          "max_round" => 1,
-         "gain_table" => [[-8, -8], [0, -15], [-15, 0], [-1, -1]],
+         "gain_table" => [[1.5, 3.5], [-0.5, 6], [5, 0.5], [0, 0]],
          "askSnum" => false,
        },
        joined: 0,
@@ -92,8 +91,8 @@ defmodule RationalPig do
     reducer = fn {group, ids}, {participants, pairs} ->
       [id1, id2] = ids
       participants = participants 
-                      |>Map.update!(id1, &updater.(&1, group, id2, "User1"))
-                      |>Map.update!(id2, &updater.(&1, group, id1, "User2"))
+                      |>Map.update!(id1, &updater.(&1, group, id2, "小さい豚"))
+                      |>Map.update!(id2, &updater.(&1, group, id1, "大きい豚"))
       pairs = Map.put(pairs, group, new_pair(id1, id2))
       {participants, pairs}
     end
@@ -278,7 +277,7 @@ defmodule RationalPig do
   def handle_received(data, %{"action" => "submit answer", "params" => params}, id) do
     participant = data.participants[id]
     pair = data.pairs[participant.pair_id]
-    buddy_id = if participant.role == "User1" do
+    buddy_id = if participant.role == "小さい豚" do
       pair.user2
     else
       pair.user1
@@ -294,7 +293,7 @@ defmodule RationalPig do
     if participant.answer != nil and buddy.answer != nil do
       Logger.debug "answerd each participants"
 
-      if participant.role == "User1" do
+      if participant.role == "小さい豚" do
         {participant, buddy} = judge(data, participant, buddy)
       else
         {buddy, participant} = judge(data, buddy, participant)
