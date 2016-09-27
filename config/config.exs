@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :prisoners_dilemma, key: :value
+#     config :rational_pig, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:prisoners_dilemma, :key)
+#     Application.get_env(:rational_pig, :key)
 #
 # Or configure a 3rd-party app:
 #

@@ -1,1 +1,1 @@
-# prisoners-dilemma
+# rational-pig

@@ -1,6 +1,6 @@
-defmodule PrisonersDilemmaTest do
+defmodule RationalPigTest do
   use ExUnit.Case
-  doctest PrisonersDilemma
+  doctest RationalPig
 
   test "the truth" do
     assert 1 + 1 == 2

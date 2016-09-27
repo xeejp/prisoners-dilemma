@@ -1,4 +1,4 @@
-defmodule PrisonersDilemma do
+defmodule RationalPig do
   use XeeThemeScript
   require Logger
 
