@@ -1,1 +1,1 @@
-# prisoners-dilemma
+# battle-of-sexes

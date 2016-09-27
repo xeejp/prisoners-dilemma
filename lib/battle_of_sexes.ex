@@ -1,4 +1,4 @@
-defmodule PrisonersDilemma do
+defmodule BattleOfSexes do
   use XeeThemeScript
   require Logger
 

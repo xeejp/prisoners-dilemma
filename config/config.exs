@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure for your application as:
 #
-#     config :prisoners_dilemma, key: :value
+#     config :battle_of_sexes, key: :value
 #
 # And access this configuration in your application as:
 #
-#     Application.get_env(:prisoners_dilemma, :key)
+#     Application.get_env(:battle_of_sexes, :key)
 #
 # Or configure a 3rd-party app:
 #
