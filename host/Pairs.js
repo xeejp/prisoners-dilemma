@@ -31,8 +31,8 @@ class Pairs extends Component {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>User1(Point)</th>
-                <th>User2(Point)</th>
+                <th>Player1(Point)</th>
+                <th>Player2(Point)</th>
                 <th>ラウンド</th>
                 <th>状況</th>
               </tr>

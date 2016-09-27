@@ -14,7 +14,7 @@ const mapStateToProps = ({logs, own_data}) => ({
 class Log extends Component {
 
   createRoundInfo(log, own_data) {
-    if (own_data.role == "User1") {
+    if (own_data.role == "Player1") {
       return (
         <tr key={log.round}>
           <td>{log.round}</td>
