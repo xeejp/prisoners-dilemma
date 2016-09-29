@@ -33,12 +33,12 @@ class App extends Component {
   render() {
     const { config, users, pairs, page } = this.props
     let datas = []
-    if(pairs && config){
+    if(pairs && config && users){
       for(var i = 0; i < Object.keys(pairs).length * 2; i++) datas[i] = []
       for(var key in pairs){
         var base = (parseInt(key) - 1) * 2
-        datas[base + 0] = [key, pairs[key].user1, "夫"].concat(pairs[key].logs.map(obj => (obj.answer1 == "yes")? "家事をする" : "家事をしない").reverse())
-        datas[base + 1] = [  "", pairs[key].user2, "妻"].concat(pairs[key].logs.map(obj => (obj.answer2 == "yes")? "家事をする" : "家事をしない").reverse())
+        datas[base + 0] = [key, (users[pairs[key].user1].snum != "")? users[pairs[key].user1].snum : pairs[key].user1, "夫"].concat(pairs[key].logs.map(obj => (obj.answer1 == "yes")? "家事をする" : "家事をしない").reverse())
+        datas[base + 1] = [  "", (users[pairs[key].user2].snum != "")? users[pairs[key].user2].snum : pairs[key].user2, "妻"].concat(pairs[key].logs.map(obj => (obj.answer2 == "yes")? "家事をする" : "家事をしない").reverse())
       }
     }
     console.log(datas)
@@ -66,7 +66,7 @@ class App extends Component {
             ["グループ数", pairs? Object.keys(pairs).length : 0],
             ["ID", "利得"],
           ].concat(
-            users? Object.keys(users).map(id => [id, users[id].point]) : []
+            users? Object.keys(users).map(id => [(users[id].snum != "")? users[id].snum : id, users[id].point]) : []
           ).concat([
             ["ペアID", "ID", "役割"].concat((() => { if(!config) return []; let data =[]; for(var i = 1; i <= config["max_round"]; i++) data[i - 1] = "ラウンド" + i; return data; })()),
           ]).concat(
