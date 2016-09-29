@@ -12,9 +12,11 @@ import GainTableCard from './GainTableCard'
 import MessageEditor from './MessageEditor'
 import ConfigEditor from './ConfigEditor'
 import MatchingButton from './MatchingButton'
+import DownloadButton from './DownloadButton'
 
 
-const mapStateToProps = ({}) => ({
+const mapStateToProps = ({ config, users, pairs, page }) => ({
+   config, users, pairs, page
 })
 
 class App extends Component {
@@ -29,6 +31,17 @@ class App extends Component {
   }
 
   render() {
+    const { config, users, pairs, page } = this.props
+    let datas = []
+    if(pairs && config){
+      for(var i = 0; i < Object.keys(pairs).length * 2; i++) datas[i] = []
+      for(var key in pairs){
+        var base = (parseInt(key) - 1) * 2
+        datas[base + 0] = [key, pairs[key].user1, "User1"].concat(pairs[key].logs.map(obj => (obj.answer1 == "yes")? "自白する" : "自白しない").reverse())
+        datas[base + 1] = [  "", pairs[key].user2, "User2"].concat(pairs[key].logs.map(obj => (obj.answer2 == "yes")? "自白する" : "自白しない").reverse())
+      }
+    }
+    console.log(datas)
     return (
       <div>
         <PageStepper />
@@ -44,9 +57,34 @@ class App extends Component {
         <MessageEditor />
         <ConfigEditor />
         <MatchingButton />
+        <DownloadButton
+          fileName={"prisoners_dilemma.csv"}
+          list={[
+            ["囚人のジレンマ"],
+            ["実験日", new Date()],
+            ["登録者数", users? Object.keys(users).length : 0],
+            ["グループ数", pairs? Object.keys(pairs).length : 0],
+            ["ID", "利得"],
+          ].concat(
+            users? Object.keys(users).map(id => [id, users[id].point]) : []
+          ).concat([
+            ["ペアID", "ID", "役割"].concat((() => { if(!config) return []; let data =[]; for(var i = 1; i <= config["max_round"]; i++) data[i - 1] = "ラウンド" + i; return data; })()),
+          ]).concat(
+            datas
+          )}
+          style={{marginLeft: '2%'}}
+          disabled={page != "result"}
+        />
       </div>
     )
   }
 }
 
-export default connect()(App)
+export default connect(mapStateToProps)(App)
+/*
+[
+  [pid, id, role, ...],
+  [    , id, role, ...]
+  ...
+]
+*/
