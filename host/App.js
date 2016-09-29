@@ -37,8 +37,8 @@ class App extends Component {
       for(var i = 0; i < Object.keys(pairs).length * 2; i++) datas[i] = []
       for(var key in pairs){
         var base = (parseInt(key) - 1) * 2
-        datas[base + 0] = [key, pairs[key].user1, "User1"].concat(pairs[key].logs.map(obj => (obj.answer1 == "yes")? "自白する" : "自白しない").reverse())
-        datas[base + 1] = [  "", pairs[key].user2, "User2"].concat(pairs[key].logs.map(obj => (obj.answer2 == "yes")? "自白する" : "自白しない").reverse())
+        datas[base + 0] = [key, pairs[key].user1, "夫"].concat(pairs[key].logs.map(obj => (obj.answer1 == "yes")? "家事をする" : "家事をしない").reverse())
+        datas[base + 1] = [  "", pairs[key].user2, "妻"].concat(pairs[key].logs.map(obj => (obj.answer2 == "yes")? "家事をする" : "家事をしない").reverse())
       }
     }
     console.log(datas)
@@ -58,9 +58,9 @@ class App extends Component {
         <ConfigEditor />
         <MatchingButton />
         <DownloadButton
-          fileName={"prisoners_dilemma.csv"}
+          fileName={"housework_sharing.csv"}
           list={[
-            ["囚人のジレンマ"],
+            ["家事分担"],
             ["実験日", new Date()],
             ["登録者数", users? Object.keys(users).length : 0],
             ["グループ数", pairs? Object.keys(pairs).length : 0],
