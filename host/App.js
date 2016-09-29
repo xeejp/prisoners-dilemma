@@ -81,10 +81,3 @@ class App extends Component {
 }
 
 export default connect(mapStateToProps)(App)
-/*
-[
-  [pid, id, role, ...],
-  [    , id, role, ...]
-  ...
-]
-*/
