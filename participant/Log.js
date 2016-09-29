@@ -18,8 +18,8 @@ class Log extends Component {
       return (
         <tr key={log.round}>
           <td>{log.round}</td>
-          <td>{log.answer1}</td>
-          <td>{log.answer2}</td>
+          <td>{(log.answer1 == "yes")? "表" : "裏"}</td>
+          <td>{(log.answer2 == "yes")? "表" : "裏"}</td>
           <td>{log.round_point1}</td>
           <td>{log.point1}</td>
         </tr>
@@ -28,8 +28,8 @@ class Log extends Component {
       return (
         <tr key={log.round}>
           <td>{log.round}</td>
-          <td>{log.answer2}</td>
-          <td>{log.answer1}</td>
+          <td>{(log.answer2 == "yes")? "表" : "裏"}</td>
+          <td>{(log.answer1 == "yes")? "表" : "裏"}</td>
           <td>{log.round_point2}</td>
           <td>{log.point2}</td>
         </tr>
