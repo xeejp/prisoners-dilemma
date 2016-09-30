@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import throttle from 'react-throttle-render'
 
 import Highcharts from 'react-highcharts'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
@@ -89,4 +90,4 @@ class App extends Component {
   }
 }
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps)(throttle(App, 200))
