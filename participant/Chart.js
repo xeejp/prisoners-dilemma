@@ -35,7 +35,7 @@ class App extends Component {
     for(var i = 0; i < 2; i++){
       for(var j = logs.length - 1; j >= 0; j--){
         var count = (logs.length - 1) - j
-        rate[i][count] = 0 + (logs[count][answer[i]] == "yes") + ((count != 0)? rate[i][count - 1] : 0)
+        rate[i][count] = 0 + (logs[j][answer[i]] == "yes") + ((count != 0)? rate[i][count - 1] : 0)
       }
     }
 
