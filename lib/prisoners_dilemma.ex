@@ -8,9 +8,10 @@ defmodule PrisonersDilemma do
   end
 
   def install, do: nil
- 
+
   def init do
     {:ok, %{"data" => %{
+       is_first_visit: true,
        page: "waiting",
        participants: %{},
        pairs: %{},
@@ -91,7 +92,7 @@ defmodule PrisonersDilemma do
 
     reducer = fn {group, ids}, {participants, pairs} ->
       [id1, id2] = ids
-      participants = participants 
+      participants = participants
                       |>Map.update!(id1, &updater.(&1, group, id2, "User1"))
                       |>Map.update!(id2, &updater.(&1, group, id1, "User2"))
       pairs = Map.put(pairs, group, new_pair(id1, id2))
@@ -99,7 +100,7 @@ defmodule PrisonersDilemma do
     end
     acc = {participants, %{}}
     {participants, groups} = Enum.reduce(groups, acc, reducer)
-    
+
     %{data | participants: participants, pairs: groups, active_pair: Map.size(groups)}
   end
 
@@ -210,12 +211,20 @@ defmodule PrisonersDilemma do
 
   def handle_received(data, %{"action" => "rematch", "params" => params}) do
     data = match(data)
-    Logger.debug " hjklk"
     action = %{
       type: "REMATCH",
       users: data.participants,
       pairs: data.pairs,
       active_pair: data.active_pair,
+    }
+    {:ok, %{"data" => data, "host" => %{action: action}}}
+  end
+
+  def handle_received(data, %{"action" => "visit", "params" => params}) do
+    data = Map.put(data, :is_first_visit, false)
+    action = %{
+      type: "VISITED",
+      is_first_visit: false,
     }
     {:ok, %{"data" => data, "host" => %{action: action}}}
   end
@@ -228,7 +237,7 @@ defmodule PrisonersDilemma do
     }
     {:ok, %{"data" => data, "host" => %{action: action}, "participant" => dispatch_to_all(data.participants, action)}}
   end
-  
+
   def handle_received(data, %{"action" => "update config", "params" => params}) do
     data = %{data | config: params}
     action = %{
@@ -348,7 +357,7 @@ defmodule PrisonersDilemma do
         own_data: data.participants[id],
       }
     }
-    
+
     buddy_action = %{
       action: %{
         type: "SUBMIT_ANSWER",
@@ -356,8 +365,8 @@ defmodule PrisonersDilemma do
         own_data: data.participants[buddy_id],
       }
     }
- 
-    {:ok, %{"data" => data, "host" => %{action: host_action}, 
+
+    {:ok, %{"data" => data, "host" => %{action: host_action},
       "participant" => %{id => participant_action, buddy_id => buddy_action}}}
   end
 

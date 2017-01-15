@@ -1,6 +1,6 @@
 import { put, take, call, select, fork } from 'redux-saga/effects'
 
-import { fetchContents, changePage, updateMessage, updateConfig, rematch } from './actions'
+import { fetchContents, changePage, updateMessage, updateConfig, rematch, visit } from './actions'
 
 function* changePageSaga() {
   while (true) {
@@ -38,6 +38,12 @@ function* rematchSaga() {
   }
 }
 
+function* visitSaga() {
+  while (true) {
+    yield take(`${visit}`)
+    yield call(sendData, 'visit')
+  }
+}
 
 function* saga() {
   yield fork(changePageSaga)
@@ -45,6 +51,7 @@ function* saga() {
   yield fork(updateMessageSaga)
   yield fork(updateConfigSaga)
   yield fork(rematchSaga)
+  yield fork(visitSaga)
 }
 
 export default saga

@@ -13,6 +13,7 @@ const initialState = {
   },
   joined: 0,
   finish_description: 0,
+  is_first_visit: false,
 }
 
 function reducer(state = initialState, action) {
@@ -47,6 +48,7 @@ function reducer(state = initialState, action) {
         pairs: action.pairs,
         config: action.config,
         active_pair: action.active_pair,
+        is_first_visit: action.is_first_visit
       })
 
     case "SUBMIT_ANSWER":
@@ -80,12 +82,17 @@ function reducer(state = initialState, action) {
         active_pair: action.active_pair,
       })
 
-      case "UPDATE_SNUM":
-        return Object.assign({}, state, {
-          users: Object.assign({}, state.users, {
-            [action.id]: action.own_data
-          })
+    case "UPDATE_SNUM":
+      return Object.assign({}, state, {
+        users: Object.assign({}, state.users, {
+          [action.id]: action.own_data
         })
+      })
+
+    case "VISITED":
+      return Object.assign({}, state, {
+        is_first_visit: action.is_first_visit
+      })
 
     default:
       return state

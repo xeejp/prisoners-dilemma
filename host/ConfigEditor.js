@@ -13,11 +13,12 @@ import Snackbar from 'material-ui/Snackbar'
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 
 
-import { fetchContents, updateConfig } from './actions'
+import { fetchContents, updateConfig, visit } from './actions'
 
-const mapStateToProps = ({page, config}) => ({
+const mapStateToProps = ({page, config, is_first_visit}) => ({
   page,
   config,
+  is_first_visit
 })
 
 const GainCell = ({ parent, gain_table, index, role}) => (
@@ -67,7 +68,8 @@ const GainTable = ({ parent, gain_table, role }) => (
 class ConfigEditor extends Component {
   constructor(props, context) {
     super(props, context)
-    const { config } = this.props
+    const { config, dispatch } = this.props
+    dispatch(fetchContents())
     this.state = {
       isOpenDialog: false,
       isOpenSnackbar: false,
@@ -83,10 +85,20 @@ class ConfigEditor extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { is_first_visit } = nextProps
+    const open = is_first_visit || this.state.isOpenDialog
+    if (is_first_visit) {
+      const { dispatch } = this.props
+      dispatch(visit())
+    }
+    this.setState({isOpenDialog: open})
+  }
+
   handleOpen() {
     const { dispatch } = this.props
     dispatch(fetchContents())
-    this.setState({ 
+    this.setState({
       config: this.props.config,
       isOpenDialog: true,
       slideIndex: 0,
@@ -94,9 +106,9 @@ class ConfigEditor extends Component {
   }
 
   handleClose() {
-    this.setState({ 
+    this.setState({
       config: this.props.config,
-      isOpenDialog: false 
+      isOpenDialog: false
     })
   }
 
@@ -113,7 +125,7 @@ class ConfigEditor extends Component {
     temp1[value[value.length - 1]] = parseFloat(event.target.value)
     this.setState({ config: config, disabled: false })
   }
-  
+
   handleChangeOnlyNaturalNum(value, event){
     if(!event.target.value || isNaN(event.target.value) || event.target.value.indexOf('.') != -1) {
       this.setState({ disabled: true })
@@ -144,14 +156,12 @@ class ConfigEditor extends Component {
     })
   }
 
-    handleChangeAskStudentId(e, value) {
-      console.log(value)
+  handleChangeAskStudentId(e, value) {
       this.setState({ config: Object.assign({}, this.state.config, { askSnum: value }) })
   }
 
-
   submit() {
-    this.setState({ 
+    this.setState({
       isOpenDialog: false,
       isOpenSnackbar: true,
       snackbarMessage: "設定を送信しました",
@@ -192,7 +202,7 @@ class ConfigEditor extends Component {
     ]
     return (
       <span>
-        <FloatingActionButton 
+        <FloatingActionButton
           onClick={this.handleOpen.bind(this)}
           disabled={page != "waiting"}
         >
