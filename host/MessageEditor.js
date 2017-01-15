@@ -241,7 +241,8 @@ class MessageEditor extends Component {
     ]
     return (
       <span>
-        <FloatingActionButton 
+        <FloatingActionButton
+          style={{marginLeft: '2%'}}
           onClick={this.handleOpen.bind(this)}
           disabled={page != "waiting"}
         >
@@ -275,7 +276,6 @@ class MessageEditor extends Component {
           autoHideDuration={2000}
           onRequestClose={this.handleRequestClose.bind(this)}
         />
-          
       </span>
     )
   }

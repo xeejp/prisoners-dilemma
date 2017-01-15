@@ -11,9 +11,7 @@ import Pairs from './Pairs'
 import GainTableCard from './GainTableCard'
 import MessageEditor from './MessageEditor'
 import ConfigEditor from './ConfigEditor'
-import MatchingButton from './MatchingButton'
 import DownloadButton from './DownloadButton'
-
 
 const mapStateToProps = ({ config, users, pairs, page }) => ({
    config, users, pairs, page
@@ -54,9 +52,8 @@ class App extends Component {
         <Users />
         <Pairs />
         <GainTableCard />
-        <MessageEditor />
         <ConfigEditor />
-        <MatchingButton />
+        <MessageEditor />
         <DownloadButton
           fileName={"prisoners_dilemma.csv"}
           list={[
