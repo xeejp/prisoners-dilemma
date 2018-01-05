@@ -6,7 +6,7 @@ import FlatButton from 'material-ui/FlatButton'
 
 import { changePage } from './actions'
 
-import { getPage } from 'util/index'
+import { getPage } from '../util/index'
 
 const pages = ["waiting", "description", "experiment", "result"]
 
