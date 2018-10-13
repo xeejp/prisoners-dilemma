@@ -109,7 +109,7 @@ class Description extends Component {
         <CardText expandable={false}>
           <p>実験が開始されるまでお待ちください</p>
           <div style={{textAlign: "center"}}>
-            <CircularProgress />
+            <CircularProgress size={140} thickness={5.0}/>
           </div>
         </CardText>
       </div>
@@ -139,13 +139,13 @@ class Description extends Component {
         <RaisedButton 
           label="戻る" 
           style={{float: "left"}} 
-          onTouchTap={this.handleBack.bind(this)}
+          onClick={this.handleBack.bind(this)}
           disabled={this.state.slideIndex == 0}
         />
         <RaisedButton
           label="進む" 
           style={{float: "right"}} 
-          onTouchTap={this.handleNext.bind(this)}
+          onClick={this.handleNext.bind(this)}
           primary={true} 
           disabled={this.state.slideIndex > message.description.length}
         />

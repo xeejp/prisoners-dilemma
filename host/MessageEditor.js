@@ -69,7 +69,7 @@ class MessageEditor extends Component {
                     <FloatingActionButton 
                       mini={true}
                       secondary={true}
-                      onTouchTap={this.deleteDescription.bind(this, index)}
+                      onClick={this.deleteDescription.bind(this, index)}
                       disabled={this.state.message.description.length <= 1}
                     >
                       <ImageDelete />
@@ -120,7 +120,7 @@ class MessageEditor extends Component {
               <td>
                 <FloatingActionButton 
                   mini={true}
-                  onTouchTap={this.addDescription.bind(this)}
+                  onClick={this.addDescription.bind(this)}
                 >
               <ImageAdd />
             </FloatingActionButton>
@@ -228,15 +228,15 @@ class MessageEditor extends Component {
         label="適用"
         primary={true}
         keyboardFocused={true}
-        onTouchTap={this.submit.bind(this)}
+        onClick={this.submit.bind(this)}
       />,
       <RaisedButton
         label="キャンセル"
-        onTouchTap={this.handleClose.bind(this)}
+        onClick={this.handleClose.bind(this)}
       />,
       <RaisedButton
         label="初期化"
-        onTouchTap={this.reset.bind(this)}
+        onClick={this.reset.bind(this)}
       />,
     ]
     return (

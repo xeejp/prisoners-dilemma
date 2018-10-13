@@ -25,7 +25,7 @@ class Waiting extends Component {
             <p>現在{joined}人が参加しています。 </p>
           </CardText>
           <div style={{textAlign: "center"}}>
-          <CircularProgress size={2}/>
+          <CircularProgress size={140} thickness={5.0}/>
         </div>
       </Card>
     )

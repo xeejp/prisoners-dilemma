@@ -188,16 +188,16 @@ class ConfigEditor extends Component {
         label="適用"
         primary={true}
         keyboardFocused={true}
-        onTouchTap={this.submit.bind(this)}
+        onClick={this.submit.bind(this)}
         disabled={this.state.disabled}
       />,
       <RaisedButton
         label="キャンセル"
-        onTouchTap={this.handleClose.bind(this)}
+        onClick={this.handleClose.bind(this)}
       />,
       <RaisedButton
         label="初期化"
-        onTouchTap={this.reset.bind(this)}
+        onClick={this.reset.bind(this)}
       />,
     ]
     return (

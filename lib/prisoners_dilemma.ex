@@ -110,17 +110,22 @@ defmodule PrisonersDilemma do
       {"yes", "yes"} ->
         user1 = %{ user1 | point: user1.point+a, round_point: a}
         user2 = %{ user2 | point: user2.point+b, round_point: b}
+        {user1, user2}
       {"yes", "no"} ->
         user1 = %{ user1 | point: user1.point+c, round_point: c}
         user2 = %{ user2 | point: user2.point+d, round_point: d}
+        {user1, user2}
       {"no", "yes"} ->
         user1 = %{ user1 | point: user1.point+e, round_point: e}
         user2 = %{ user2 | point: user2.point+f, round_point: f}
+        {user1, user2}
       {"no", "no"} ->
         user1 = %{ user1 | point: user1.point+g, round_point: g}
         user2 = %{ user2 | point: user2.point+h, round_point: h}
+        {user1, user2}
+      _ ->
+        {user1, user2}
     end
-    {user1, user2}
   end
 
 
@@ -154,7 +159,7 @@ defmodule PrisonersDilemma do
 
   def handle_received(data, %{"action" => "change page", "params" => params}) do
     data = %{data | page: params}
-    unless data.page == "result" do
+    data = unless data.page == "result" do
       data = Map.put(data, :joined, Map.size(data.participants))
       pairs = Enum.map(data.pairs, fn { id, pair } ->
         {id, %{ pair |
@@ -170,11 +175,15 @@ defmodule PrisonersDilemma do
           point: 0,
           ans_yes: 0,
         }} end) |> Enum.into(%{})
-      data = %{data | participants: participants, pairs: pairs, active_pair: Map.size(pairs)}
+      %{data | participants: participants, pairs: pairs, active_pair: Map.size(pairs)}
+    else
+      data
     end
-    if data.page == "description" do
+    data = if data.page == "description" do
       data = %{data | finish_description: 0}
-      data = match(data)
+      match(data)
+    else
+      data
     end
     host_action = %{
       type: "CHANGE_PAGE",
@@ -295,18 +304,21 @@ defmodule PrisonersDilemma do
     buddy = data.participants[buddy_id]
 
     participant = %{ participant | answer: params }
-    if params == "yes" do
-      participant = %{ participant | ans_yes: participant.ans_yes+1 }
+    participant = if params == "yes" do
+      %{ participant | ans_yes: participant.ans_yes+1 }
+    else
+      participant
     end
     data = put_in(data.participants[id], participant)
 
-    if participant.answer != nil and buddy.answer != nil do
+    data = if participant.answer != nil and buddy.answer != nil do
       Logger.debug "answerd each participants"
 
-      if participant.role == "User1" do
-        {participant, buddy} = judge(data, participant, buddy)
+      {participant, buddy} = if participant.role == "User1" do
+        judge(data, participant, buddy)
       else
         {buddy, participant} = judge(data, buddy, participant)
+        {participant, buddy}
       end
       data = put_in(data.participants[id], participant)
       data = put_in(data.participants[buddy_id], buddy)
@@ -322,12 +334,16 @@ defmodule PrisonersDilemma do
       }
       Logger.debug data.config["max_round"]
       Logger.debug pair.current_round
-      if pair.current_round >= data.config["max_round"] do
+      {data, participant, buddy, pair } = if pair.current_round >= data.config["max_round"] do
         data = %{ data | active_pair: data.active_pair-1}
         participant = %{ participant | finished: true }
         buddy = %{ buddy | finished: true }
         pair = %{ pair | finished: true }
+        {data, participant, buddy, pair }
+      else
+        {data, participant, buddy, pair }
       end
+
       pair = %{ pair |
         logs: [log] ++ pair.logs,
         current_round: if pair.current_round < data.config["max_round"] do
@@ -340,7 +356,9 @@ defmodule PrisonersDilemma do
       buddy = %{ buddy | answer: nil }
       data = put_in(data.pairs[participant.pair_id], pair)
       data = put_in(data.participants[id], participant)
-      data = put_in(data.participants[buddy_id], buddy)
+      put_in(data.participants[buddy_id], buddy)
+    else
+      data
     end
 
     host_action = %{
@@ -371,9 +389,9 @@ defmodule PrisonersDilemma do
   end
 
   def handle_received(data, %{"action" => "finish description"}, id) do
-    unless data.participants[id].is_finish_description do
+    data = unless data.participants[id].is_finish_description do
       data = %{data | finish_description: data.finish_description+1}
-      data = put_in(data.participants[id].is_finish_description, true)
+      put_in(data.participants[id].is_finish_description, true)
     end
     action = %{
       type: "FINISH_DESCRIPTION",
